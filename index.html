@@ -5,365 +5,272 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SOB OA Roster</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --blue: #075aaa;
-      --blue-dark: #06447f;
-      --blue-light: #eaf4ff;
+      --black: #111111;
+      --dark: #292929;
+      --muted: #777777;
+      --line: #e8e8e8;
+      --soft: #f7f7f7;
       --white: #ffffff;
-      --text: #172033;
-      --muted: #6c7788;
-      --border: #dce5ef;
-      --green: #16834b;
-      --red: #c93636;
-      --orange: #c87900;
-      --shadow: 0 8px 24px rgba(15, 70, 120, .10);
+      --green: #217346;
+      --red: #b42318;
       --radius: 14px;
+      --shadow: 0 14px 45px rgba(0,0,0,.07);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: #f4f8fc;
-      color: var(--text);
-      font-family: "Arimo", Arial, sans-serif;
+      color: var(--black);
+      background: var(--white);
+      font-family: "Manrope", Arial, sans-serif;
     }
 
-    button, input, select, textarea {
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      cursor: pointer;
-    }
-
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
     .hidden { display: none !important; }
-
-    .topbar {
-      min-height: 68px;
-      padding: 12px 20px;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.15);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .brand-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      background: white;
-      color: var(--blue);
-      font-weight: 700;
-    }
-
-    .topbar-user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-    }
-
-    .logout {
-      padding: 9px 13px;
-      border-radius: 8px;
-      color: white;
-      background: rgba(255,255,255,.16);
-    }
-
-    .page {
-      max-width: 1250px;
-      margin: auto;
-      padding: 22px;
-    }
 
     .auth-wrap {
       min-height: 100vh;
       display: grid;
       place-items: center;
-      padding: 20px;
-      background: linear-gradient(135deg, #eaf5ff, #f8fbff);
+      padding: 24px;
+      background: #fafafa;
     }
 
     .auth-card {
       width: min(430px, 100%);
+      padding: 42px;
       background: white;
-      padding: 30px;
-      border-radius: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
       box-shadow: var(--shadow);
     }
 
-    .auth-title {
-      color: var(--blue);
-      text-align: center;
-      margin: 0 0 7px;
+    .logo {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 24px;
+      color: white;
+      background: var(--black);
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
 
-    .auth-subtitle {
-      color: var(--muted);
-      text-align: center;
-      margin: 0 0 24px;
-      font-size: 14px;
-    }
+    h1, h2, h3, p { margin-top: 0; }
+    .auth-card h1 { text-align: center; font-size: 25px; letter-spacing: -.8px; }
+    .subtitle { color: var(--muted); text-align: center; font-size: 13px; margin-bottom: 30px; }
 
     .tabs {
-      display: flex;
-      background: #f0f5fa;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
       padding: 4px;
+      margin-bottom: 22px;
+      background: var(--soft);
       border-radius: 10px;
-      margin-bottom: 20px;
     }
 
     .tab {
-      flex: 1;
+      border: 0;
       padding: 10px;
-      border-radius: 8px;
-      background: transparent;
       color: var(--muted);
+      background: transparent;
+      border-radius: 7px;
+      font-size: 13px;
     }
 
     .tab.active {
+      color: var(--black);
       background: white;
-      color: var(--blue);
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
       font-weight: 700;
-      box-shadow: 0 2px 6px rgba(0,0,0,.07);
     }
 
     label {
       display: block;
-      margin: 13px 0 6px;
-      font-size: 13px;
-      font-weight: 600;
+      margin: 16px 0 7px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 11px 12px;
-      border: 1px solid var(--border);
+      padding: 12px 13px;
+      color: var(--black);
+      background: white;
+      border: 1px solid #dcdcdc;
       border-radius: 9px;
       outline: none;
-      background: white;
-      color: var(--text);
     }
 
     input:focus, select:focus, textarea:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(7,90,170,.10);
+      border-color: var(--black);
+      box-shadow: 0 0 0 3px rgba(0,0,0,.06);
     }
 
-    textarea {
-      min-height: 90px;
-      resize: vertical;
+    textarea { min-height: 90px; resize: vertical; }
+
+    .password-box { position: relative; }
+    .password-box input { padding-right: 72px; }
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 7px;
+      padding: 6px 8px;
+      border: 0;
+      color: var(--muted);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .primary-btn {
       width: 100%;
-      margin-top: 18px;
-      padding: 12px;
-      border-radius: 9px;
-      background: var(--blue);
+      margin-top: 22px;
+      padding: 13px;
       color: white;
+      background: var(--black);
+      border: 1px solid var(--black);
+      border-radius: 9px;
       font-weight: 700;
     }
 
-    .primary-btn:hover { background: var(--blue-dark); }
+    .primary-btn:hover { background: var(--dark); }
 
     .message {
-      margin-top: 14px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 14px;
       display: none;
+      margin-top: 15px;
+      padding: 11px 12px;
+      border-radius: 8px;
+      font-size: 13px;
     }
 
-    .message.success { display: block; color: var(--green); background: #eaf8f0; }
-    .message.error { display: block; color: var(--red); background: #fff0f0; }
+    .message.success { display: block; color: var(--green); background: #edf8f0; }
+    .message.error { display: block; color: var(--red); background: #fff1f0; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 20px max(22px, calc((100% - 1180px) / 2));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--black);
+      border-radius: 9px;
+      font-size: 10px;
+      letter-spacing: .7px;
+    }
+
+    .user-area { display: flex; align-items: center; gap: 16px; font-size: 13px; }
+    .logout, .nav button, .small-btn {
+      padding: 9px 13px;
+      color: var(--black);
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .page { max-width: 1180px; margin: auto; padding: 34px 22px; }
 
     .nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 22px;
+      margin-bottom: 34px;
     }
 
-    .nav button {
-      padding: 10px 15px;
-      border-radius: 9px;
-      background: white;
-      color: var(--muted);
-      box-shadow: 0 2px 8px rgba(0,0,0,.05);
-    }
-
-    .nav button.active {
+    .nav button.active, .small-btn.dark {
       color: white;
-      background: var(--blue);
+      background: var(--black);
+      border-color: var(--black);
     }
 
     .section { display: none; }
     .section.active { display: block; }
 
-    .welcome {
-      margin-bottom: 18px;
-    }
-
-    .welcome h2 {
-      margin: 0 0 5px;
-      color: var(--blue-dark);
-    }
-
-    .welcome p {
-      margin: 0;
-      color: var(--muted);
-    }
+    .welcome h2 { margin-bottom: 5px; font-size: 28px; letter-spacing: -1px; }
+    .welcome p { color: var(--muted); font-size: 13px; }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin: 28px 0;
     }
 
-    .card {
+    .card, .table-wrap, .form-card {
       background: white;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 18px;
       box-shadow: var(--shadow);
     }
 
-    .stat-label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 21px;
-      font-weight: 700;
-      color: var(--blue);
-      word-break: break-word;
-    }
+    .card { padding: 21px; }
+    .stat-label { color: var(--muted); font-size: 12px; }
+    .stat-value { margin-top: 12px; font-size: 23px; font-weight: 800; }
 
     .section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 14px;
+      margin: 28px 0 14px;
     }
 
-    .section-head h3 {
-      margin: 0;
-      color: var(--blue-dark);
-    }
+    .section-head h3 { margin: 0; font-size: 17px; }
+    .filters { display: grid; grid-template-columns: 180px 180px; gap: 10px; margin-bottom: 14px; }
 
-    .small-btn {
-      padding: 9px 13px;
-      border-radius: 8px;
-      background: var(--blue-light);
-      color: var(--blue);
-      font-weight: 600;
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: 180px 180px 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      background: white;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    table {
-      width: 100%;
-      min-width: 650px;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #edf1f5;
-      text-align: left;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-
-    th {
-      background: #f5f9fd;
-      color: var(--blue-dark);
-      font-weight: 700;
-    }
-
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; min-width: 650px; border-collapse: collapse; }
+    th, td { padding: 13px 15px; text-align: left; border-bottom: 1px solid var(--line); font-size: 12px; white-space: nowrap; }
+    th { color: var(--muted); background: var(--soft); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
     tr:last-child td { border-bottom: 0; }
 
     .badge {
       display: inline-block;
       padding: 5px 9px;
-      border-radius: 30px;
-      font-size: 12px;
+      border-radius: 20px;
+      color: var(--muted);
+      background: var(--soft);
+      font-size: 11px;
       font-weight: 700;
-      background: #edf2f7;
-      color: var(--muted);
     }
 
-    .badge.approved, .badge.working { background: #e8f7ef; color: var(--green); }
-    .badge.pending { background: #fff5df; color: var(--orange); }
-    .badge.rejected, .badge.disabled { background: #ffeded; color: var(--red); }
+    .badge.approved { color: var(--green); background: #edf8f0; }
+    .badge.pending { color: #9a6700; background: #fff8df; }
+    .badge.rejected { color: var(--red); background: #fff1f0; }
 
-    .form-card {
-      max-width: 650px;
-      background: white;
-      padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 28px;
-      color: var(--muted);
-    }
-
-    .loader {
-      color: var(--blue);
-      padding: 18px;
-      text-align: center;
-    }
+    .form-card { max-width: 650px; padding: 22px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .empty, .loader { padding: 28px; color: var(--muted); text-align: center; font-size: 13px; }
 
     @media (max-width: 700px) {
-      .page { padding: 15px; }
-      .topbar { padding: 10px 14px; }
-      .topbar-user span { display: none; }
-      .cards { grid-template-columns: 1fr; }
-      .filters, .grid-2 { grid-template-columns: 1fr; }
-      .auth-card { padding: 23px; }
+      .auth-card { padding: 28px 22px; }
+      .topbar { padding: 15px; }
+      .user-area span { display: none; }
+      .page { padding: 25px 15px; }
+      .cards, .grid-2, .filters { grid-template-columns: 1fr; }
+      .welcome h2 { font-size: 24px; }
     }
   </style>
 </head>
@@ -371,31 +278,31 @@
 <body>
   <div id="authScreen" class="auth-wrap">
     <div class="auth-card">
-      <div class="brand" style="justify-content:center;margin-bottom:20px">
-        <div class="brand-logo">SOB</div>
-      </div>
-
-      <h1 class="auth-title">SOB OA Roster</h1>
-      <p class="auth-subtitle">Daily roster and leave management</p>
+      <div class="logo">SOB</div>
+      <h1>SOB OA Roster</h1>
+      <p class="subtitle">Daily roster and leave management</p>
 
       <div class="tabs">
-        <button class="tab active" onclick="showAuthTab('login')">Login</button>
+        <button class="tab active" onclick="showAuthTab('login')">Sign in</button>
         <button class="tab" onclick="showAuthTab('register')">Register</button>
       </div>
 
       <form id="loginForm">
-        <label>Employee ID</label>
-        <input id="loginId" required autocomplete="username">
+        <label>Username</label>
+        <input id="loginUsername" required autocomplete="username" placeholder="e.g. mohit.s">
 
         <label>Password</label>
-        <input id="loginPassword" type="password" required autocomplete="current-password">
+        <div class="password-box">
+          <input id="loginPassword" type="password" required inputmode="numeric" pattern="[0-9]{4,5}" maxlength="5" autocomplete="current-password" placeholder="4–5 digits">
+          <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">SHOW</button>
+        </div>
 
-        <button class="primary-btn">Login</button>
+        <button class="primary-btn">Sign in</button>
       </form>
 
       <form id="registerForm" class="hidden">
-        <label>Employee ID</label>
-        <input id="registerId" required>
+        <label>Username</label>
+        <input id="registerUsername" required placeholder="Choose a username">
 
         <label>Full Name</label>
         <input id="registerName" required>
@@ -404,9 +311,12 @@
         <input id="registerPhone">
 
         <label>Password</label>
-        <input id="registerPassword" type="password" required minlength="4">
+        <div class="password-box">
+          <input id="registerPassword" type="password" required inputmode="numeric" pattern="[0-9]{4,5}" minlength="4" maxlength="5" placeholder="4–5 digits">
+          <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">SHOW</button>
+        </div>
 
-        <button class="primary-btn">Create Account</button>
+        <button class="primary-btn">Create account</button>
       </form>
 
       <div id="authMessage" class="message"></div>
@@ -416,22 +326,22 @@
   <div id="appScreen" class="hidden">
     <header class="topbar">
       <div class="brand">
-        <div class="brand-logo">SOB</div>
+        <div class="brand-mark">SOB</div>
         <span>SOB OA Roster</span>
       </div>
-      <div class="topbar-user">
+      <div class="user-area">
         <span id="userName"></span>
-        <button class="logout" onclick="logout()">Logout</button>
+        <button class="logout" onclick="logout()">Log out</button>
       </div>
     </header>
 
     <main class="page">
       <nav class="nav">
-        <button class="active" data-section="dashboard" onclick="openSection('dashboard', this)">Dashboard</button>
-        <button data-section="roster" onclick="openSection('roster', this)">Monthly Roster</button>
-        <button data-section="requests" onclick="openSection('requests', this)">My Requests</button>
-        <button data-section="newRequest" onclick="openSection('newRequest', this)">Submit Request</button>
-        <button id="adminNav" class="hidden" data-section="admin" onclick="openSection('admin', this)">Admin</button>
+        <button class="active" onclick="openSection('dashboard', this)">Dashboard</button>
+        <button onclick="openSection('roster', this)">Monthly Roster</button>
+        <button onclick="openSection('requests', this)">My Requests</button>
+        <button onclick="openSection('newRequest', this)">Submit Request</button>
+        <button id="adminNav" class="hidden" onclick="openSection('admin', this)">Admin</button>
       </nav>
 
       <section id="dashboard" class="section active">
@@ -441,116 +351,91 @@
         </div>
 
         <div class="cards">
-          <div class="card">
-            <div class="stat-label">Today's Duty</div>
-            <div id="todayDuty" class="stat-value">Loading...</div>
-          </div>
-          <div class="card">
-            <div class="stat-label">Tomorrow's Duty</div>
-            <div id="tomorrowDuty" class="stat-value">Loading...</div>
-          </div>
-          <div class="card">
-            <div class="stat-label">Pending Requests</div>
-            <div id="pendingCount" class="stat-value">0</div>
-          </div>
+          <div class="card"><div class="stat-label">Today's duty</div><div id="todayDuty" class="stat-value">—</div></div>
+          <div class="card"><div class="stat-label">Tomorrow's duty</div><div id="tomorrowDuty" class="stat-value">—</div></div>
+          <div class="card"><div class="stat-label">Pending requests</div><div id="pendingCount" class="stat-value">0</div></div>
         </div>
 
-        <div class="card">
-          <div class="section-head">
-            <h3>Recent Roster</h3>
-            <button class="small-btn" onclick="loadDashboard()">Refresh</button>
-          </div>
-          <div id="recentRoster"></div>
+        <div class="section-head">
+          <h3>Recent roster</h3>
+          <button class="small-btn" onclick="loadDashboard()">Refresh</button>
         </div>
+        <div id="recentRoster" class="table-wrap"></div>
       </section>
 
       <section id="roster" class="section">
         <div class="section-head">
-          <h3>Monthly Roster</h3>
+          <h3>Monthly roster</h3>
           <button class="small-btn" onclick="loadRoster()">Refresh</button>
         </div>
-
         <div class="filters">
           <input id="rosterMonth" type="month">
           <input id="rosterDate" type="date">
-          <div></div>
         </div>
-
-        <div class="table-wrap">
-          <div id="rosterTable" class="loader">Loading roster...</div>
-        </div>
+        <div id="rosterTable" class="table-wrap loader">Loading roster...</div>
       </section>
 
       <section id="requests" class="section">
         <div class="section-head">
-          <h3>My Requests</h3>
+          <h3>My requests</h3>
           <button class="small-btn" onclick="loadRequests()">Refresh</button>
         </div>
-        <div class="table-wrap">
-          <div id="requestsTable" class="loader">Loading requests...</div>
-        </div>
+        <div id="requestsTable" class="table-wrap loader">Loading requests...</div>
       </section>
 
       <section id="newRequest" class="section">
-        <div class="section-head">
-          <h3>Submit Request</h3>
-        </div>
-
+        <div class="section-head"><h3>Submit request</h3></div>
         <form id="requestForm" class="form-card">
-          <label>Request Type</label>
+          <label>Request type</label>
           <select id="requestType" required>
-            <option value="Leave">Leave</option>
-            <option value="Half Day">Half Day</option>
-            <option value="Emergency Leave">Emergency Leave</option>
-            <option value="PPS">PPS</option>
+            <option>Leave</option>
+            <option>Half Day</option>
+            <option>Emergency Leave</option>
+            <option>PPS</option>
           </select>
 
           <div class="grid-2">
-            <div>
-              <label>From Date</label>
-              <input id="requestFrom" type="date" required>
-            </div>
-            <div>
-              <label>To Date</label>
-              <input id="requestTo" type="date" required>
-            </div>
+            <div><label>From date</label><input id="requestFrom" type="date" required></div>
+            <div><label>To date</label><input id="requestTo" type="date" required></div>
           </div>
 
-          <label>Reason / Remarks</label>
+          <label>Reason / remarks</label>
           <textarea id="requestReason" required></textarea>
-
-          <button class="primary-btn">Submit Request</button>
+          <button class="primary-btn">Submit request</button>
           <div id="requestMessage" class="message"></div>
         </form>
       </section>
 
       <section id="admin" class="section">
         <div class="section-head">
-          <h3>Pending User Approvals</h3>
+          <h3>Pending approvals</h3>
           <button class="small-btn" onclick="loadAdmin()">Refresh</button>
         </div>
-        <div class="table-wrap">
-          <div id="adminTable" class="loader">Loading users...</div>
-        </div>
+        <div id="adminTable" class="table-wrap loader">Loading users...</div>
       </section>
     </main>
   </div>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwUYCN4HsWQ13AfswZHTxPCGPrM1RBLu-PiRIVuLyhWCL8V8MaN-vG55sQB-4gqLgDXWg/exec";
-
     let currentUser = null;
     let passwordHash = "";
-
     const $ = id => document.getElementById(id);
 
     function showAuthTab(tab) {
       $("loginForm").classList.toggle("hidden", tab !== "login");
       $("registerForm").classList.toggle("hidden", tab !== "register");
-      document.querySelectorAll(".tab").forEach((button, index) => {
-        button.classList.toggle("active", (tab === "login" && index === 0) || (tab === "register" && index === 1));
-      });
+      document.querySelectorAll(".tab").forEach((button, index) =>
+        button.classList.toggle("active", tab === "login" ? index === 0 : index === 1)
+      );
       showMessage("authMessage", "", "");
+    }
+
+    function togglePassword(id, button) {
+      const input = $(id);
+      const visible = input.type === "text";
+      input.type = visible ? "password" : "text";
+      button.textContent = visible ? "SHOW" : "HIDE";
     }
 
     function showMessage(id, text, type) {
@@ -565,13 +450,12 @@
       return [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
     }
 
+    function validatePassword(value) {
+      return /^\d{4,5}$/.test(value);
+    }
+
     function api(action, params = {}) {
       return new Promise((resolve, reject) => {
-        if (API_URL.includes("PASTE_YOUR")) {
-          reject(new Error("Please add your Apps Script Web App URL in index.html."));
-          return;
-        }
-
         const callback = "sobCallback" + Date.now() + Math.floor(Math.random() * 1000);
         const script = document.createElement("script");
         const query = new URLSearchParams({ action, callback, ...params });
@@ -579,7 +463,9 @@
         window[callback] = result => {
           delete window[callback];
           script.remove();
-          result && result.success ? resolve(result) : reject(new Error(result.message || "Request failed"));
+          result && result.success
+            ? resolve(result)
+            : reject(new Error(result.message || "Request failed"));
         };
 
         script.onerror = () => {
@@ -588,19 +474,28 @@
           reject(new Error("Could not connect to the server."));
         };
 
-        script.src = API_URL + "?" + query.toString();
+        script.src = API_URL + "?" + query;
         document.body.appendChild(script);
       });
     }
 
     $("loginForm").addEventListener("submit", async event => {
       event.preventDefault();
-      showMessage("authMessage", "Logging in...", "success");
+      const password = $("loginPassword").value;
+
+      if (!validatePassword(password)) {
+        showMessage("authMessage", "Password must contain 4 or 5 digits.", "error");
+        return;
+      }
+
+      showMessage("authMessage", "Signing in...", "success");
 
       try {
-        const id = $("loginId").value.trim().toUpperCase();
-        const hash = await sha256($("loginPassword").value);
-        const result = await api("login", { id, password: hash });
+        const hash = await sha256(password);
+        const result = await api("login", {
+          username: $("loginUsername").value.trim().toLowerCase(),
+          password: hash
+        });
 
         currentUser = result.user;
         passwordHash = hash;
@@ -614,14 +509,21 @@
 
     $("registerForm").addEventListener("submit", async event => {
       event.preventDefault();
+      const password = $("registerPassword").value;
+
+      if (!validatePassword(password)) {
+        showMessage("authMessage", "Password must contain 4 or 5 digits.", "error");
+        return;
+      }
+
       showMessage("authMessage", "Creating account...", "success");
 
       try {
         const result = await api("register", {
-          id: $("registerId").value.trim().toUpperCase(),
+          username: $("registerUsername").value.trim().toLowerCase(),
           name: $("registerName").value.trim(),
           phone: $("registerPhone").value.trim(),
-          password: await sha256($("registerPassword").value)
+          password: await sha256(password)
         });
 
         showMessage("authMessage", result.message, "success");
@@ -634,7 +536,7 @@
     function startApp() {
       $("authScreen").classList.add("hidden");
       $("appScreen").classList.remove("hidden");
-      $("userName").textContent = currentUser.name + " (" + currentUser.id + ")";
+      $("userName").textContent = currentUser.name + " · " + currentUser.username;
       $("welcomeText").textContent = "Welcome, " + currentUser.name;
       $("todayText").textContent = new Date().toLocaleDateString(undefined, {
         weekday: "long", day: "numeric", month: "long", year: "numeric"
@@ -645,7 +547,6 @@
       const now = new Date();
       $("rosterMonth").value = now.toISOString().slice(0, 7);
       $("rosterDate").value = now.toISOString().slice(0, 10);
-
       loadDashboard();
     }
 
@@ -658,7 +559,7 @@
       document.querySelectorAll(".section").forEach(item => item.classList.remove("active"));
       document.querySelectorAll(".nav button").forEach(item => item.classList.remove("active"));
       $(section).classList.add("active");
-      if (button) button.classList.add("active");
+      button.classList.add("active");
 
       if (section === "dashboard") loadDashboard();
       if (section === "roster") loadRoster();
@@ -669,25 +570,30 @@
     async function loadDashboard() {
       try {
         const result = await api("getRoster", {
-          id: currentUser.id,
+          username: currentUser.username,
           password: passwordHash,
           month: new Date().toISOString().slice(0, 7)
         });
 
         const rows = result.rows || [];
         const today = new Date().toISOString().slice(0, 10);
-        const tomorrowDate = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+        const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
         const todayRow = rows.find(row => row.date === today);
-        const tomorrowRow = rows.find(row => row.date === tomorrowDate);
+        const tomorrowRow = rows.find(row => row.date === tomorrow);
 
-        $("todayDuty").textContent = todayRow ? (todayRow.location || todayRow.status || "Not assigned") : "Not assigned";
-        $("tomorrowDuty").textContent = tomorrowRow ? (tomorrowRow.location || tomorrowRow.status || "Not assigned") : "Not assigned";
-
+        $("todayDuty").textContent = todayRow?.location || todayRow?.status || "Not assigned";
+        $("tomorrowDuty").textContent = tomorrowRow?.location || tomorrowRow?.status || "Not assigned";
         renderRoster(rows.slice(0, 7), "recentRoster");
-        const requests = await api("getRequests", { id: currentUser.id, password: passwordHash });
-        $("pendingCount").textContent = (requests.rows || []).filter(row => row.status === "Pending").length;
+
+        const requests = await api("getRequests", {
+          username: currentUser.username,
+          password: passwordHash
+        });
+
+        $("pendingCount").textContent =
+          (requests.rows || []).filter(row => row.status === "Pending").length;
       } catch (error) {
-        $("recentRoster").innerHTML = `<div class="empty">${error.message}</div>`;
+        $("recentRoster").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
       }
     }
 
@@ -696,30 +602,30 @@
 
       try {
         const result = await api("getRoster", {
-          id: currentUser.id,
+          username: currentUser.username,
           password: passwordHash,
           month: $("rosterMonth").value
         });
         renderRoster(result.rows || [], "rosterTable");
       } catch (error) {
-        $("rosterTable").innerHTML = `<div class="empty">${error.message}</div>`;
+        $("rosterTable").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
       }
     }
 
     $("rosterMonth").addEventListener("change", loadRoster);
-    $("rosterDate").addEventListener("change", async () => {
-      const rows = await getRosterForCurrentMonth();
-      renderRoster(rows.filter(row => row.date === $("rosterDate").value), "rosterTable");
-    });
 
-    async function getRosterForCurrentMonth() {
-      const result = await api("getRoster", {
-        id: currentUser.id,
-        password: passwordHash,
-        month: $("rosterMonth").value
-      });
-      return result.rows || [];
-    }
+    $("rosterDate").addEventListener("change", async () => {
+      try {
+        const result = await api("getRoster", {
+          username: currentUser.username,
+          password: passwordHash,
+          month: $("rosterMonth").value
+        });
+        renderRoster((result.rows || []).filter(row => row.date === $("rosterDate").value), "rosterTable");
+      } catch (error) {
+        $("rosterTable").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+      }
+    });
 
     function renderRoster(rows, targetId) {
       if (!rows.length) {
@@ -729,21 +635,15 @@
 
       $(targetId).innerHTML = `
         <table>
-          <thead>
+          <thead><tr><th>Date</th><th>Location</th><th>Shift</th><th>Status</th><th>Remarks</th></tr></thead>
+          <tbody>${rows.map(row => `
             <tr>
-              <th>Date</th><th>Location</th><th>Shift</th><th>Status</th><th>Remarks</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(row => `
-              <tr>
-                <td>${escapeHtml(row.date)}</td>
-                <td>${escapeHtml(row.location || "—")}</td>
-                <td>${escapeHtml(row.shift || "—")}</td>
-                <td><span class="badge ${statusClass(row.status)}">${escapeHtml(row.status || "Working")}</span></td>
-                <td>${escapeHtml(row.remarks || "—")}</td>
-              </tr>
-            `).join("")}
+              <td>${escapeHtml(row.date)}</td>
+              <td>${escapeHtml(row.location || "—")}</td>
+              <td>${escapeHtml(row.shift || "—")}</td>
+              <td><span class="badge ${statusClass(row.status)}">${escapeHtml(row.status || "Working")}</span></td>
+              <td>${escapeHtml(row.remarks || "—")}</td>
+            </tr>`).join("")}
           </tbody>
         </table>`;
     }
@@ -752,7 +652,10 @@
       $("requestsTable").innerHTML = '<div class="loader">Loading requests...</div>';
 
       try {
-        const result = await api("getRequests", { id: currentUser.id, password: passwordHash });
+        const result = await api("getRequests", {
+          username: currentUser.username,
+          password: passwordHash
+        });
         const rows = result.rows || [];
 
         if (!rows.length) {
@@ -762,24 +665,20 @@
 
         $("requestsTable").innerHTML = `
           <table>
-            <thead>
-              <tr><th>Submitted</th><th>Dates</th><th>Type</th><th>Reason</th><th>Status</th><th>Approved By</th></tr>
-            </thead>
-            <tbody>
-              ${rows.map(row => `
-                <tr>
-                  <td>${escapeHtml(row.submitted)}</td>
-                  <td>${escapeHtml(row.fromDate)} to ${escapeHtml(row.toDate)}</td>
-                  <td>${escapeHtml(row.type)}</td>
-                  <td>${escapeHtml(row.reason)}</td>
-                  <td><span class="badge ${statusClass(row.status)}">${escapeHtml(row.status)}</span></td>
-                  <td>${escapeHtml(row.approvedBy || "—")}</td>
-                </tr>
-              `).join("")}
+            <thead><tr><th>Submitted</th><th>Dates</th><th>Type</th><th>Reason</th><th>Status</th><th>Approved by</th></tr></thead>
+            <tbody>${rows.map(row => `
+              <tr>
+                <td>${escapeHtml(row.submitted)}</td>
+                <td>${escapeHtml(row.fromDate)} to ${escapeHtml(row.toDate)}</td>
+                <td>${escapeHtml(row.type)}</td>
+                <td>${escapeHtml(row.reason)}</td>
+                <td><span class="badge ${statusClass(row.status)}">${escapeHtml(row.status)}</span></td>
+                <td>${escapeHtml(row.approvedBy || "—")}</td>
+              </tr>`).join("")}
             </tbody>
           </table>`;
       } catch (error) {
-        $("requestsTable").innerHTML = `<div class="empty">${error.message}</div>`;
+        $("requestsTable").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
       }
     }
 
@@ -789,7 +688,7 @@
 
       try {
         const result = await api("submitRequest", {
-          id: currentUser.id,
+          username: currentUser.username,
           password: passwordHash,
           type: $("requestType").value,
           fromDate: $("requestFrom").value,
@@ -809,7 +708,7 @@
 
       try {
         const result = await api("getPendingUsers", {
-          id: currentUser.id,
+          username: currentUser.username,
           password: passwordHash
         });
         const rows = result.rows || [];
@@ -821,39 +720,35 @@
 
         $("adminTable").innerHTML = `
           <table>
-            <thead>
-              <tr><th>Employee ID</th><th>Name</th><th>Phone</th><th>Status</th><th>Actions</th></tr>
-            </thead>
-            <tbody>
-              ${rows.map(row => `
-                <tr>
-                  <td>${escapeHtml(row.id)}</td>
-                  <td>${escapeHtml(row.name)}</td>
-                  <td>${escapeHtml(row.phone || "—")}</td>
-                  <td><span class="badge pending">${escapeHtml(row.status)}</span></td>
-                  <td>
-                    <button class="small-btn" onclick="adminAction('approve','${encodeURIComponent(row.id)}')">Approve</button>
-                    <button class="small-btn" onclick="adminAction('reject','${encodeURIComponent(row.id)}')">Reject</button>
-                    <button class="small-btn" onclick="adminAction('disable','${encodeURIComponent(row.id)}')">Disable</button>
-                  </td>
-                </tr>
-              `).join("")}
+            <thead><tr><th>Username</th><th>Name</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>${rows.map(row => `
+              <tr>
+                <td>${escapeHtml(row.username)}</td>
+                <td>${escapeHtml(row.name)}</td>
+                <td>${escapeHtml(row.phone || "—")}</td>
+                <td><span class="badge pending">${escapeHtml(row.status)}</span></td>
+                <td>
+                  <button class="small-btn" onclick="adminAction('approve','${encodeURIComponent(row.username)}')">Approve</button>
+                  <button class="small-btn" onclick="adminAction('reject','${encodeURIComponent(row.username)}')">Reject</button>
+                  <button class="small-btn" onclick="adminAction('disable','${encodeURIComponent(row.username)}')">Disable</button>
+                </td>
+              </tr>`).join("")}
             </tbody>
           </table>`;
       } catch (error) {
-        $("adminTable").innerHTML = `<div class="empty">${error.message}</div>`;
+        $("adminTable").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
       }
     }
 
-    async function adminAction(action, encodedId) {
-      const id = decodeURIComponent(encodedId);
-      if (!confirm(`${action} ${id}?`)) return;
+    async function adminAction(action, encodedUsername) {
+      const targetUsername = decodeURIComponent(encodedUsername);
+      if (!confirm(`${action} ${targetUsername}?`)) return;
 
       try {
         await api(action, {
-          id: currentUser.id,
+          username: currentUser.username,
           password: passwordHash,
-          targetId: id
+          targetUsername
         });
         loadAdmin();
       } catch (error) {
@@ -862,10 +757,10 @@
     }
 
     function statusClass(status) {
-      status = String(status || "").toLowerCase();
-      if (status.includes("approved") || status.includes("working")) return "approved";
-      if (status.includes("pending")) return "pending";
-      if (status.includes("reject") || status.includes("disable")) return "rejected";
+      const value = String(status || "").toLowerCase();
+      if (value.includes("approved") || value.includes("working")) return "approved";
+      if (value.includes("pending")) return "pending";
+      if (value.includes("reject") || value.includes("disable")) return "rejected";
       return "";
     }
 
