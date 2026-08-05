@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOB OA Roster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue: #075aaa;
+      --blue-dark: #06447f;
+      --blue-light: #eaf4ff;
+      --white: #ffffff;
+      --text: #172033;
+      --muted: #6c7788;
+      --border: #dce5ef;
+      --green: #16834b;
+      --red: #c93636;
+      --orange: #c87900;
+      --shadow: 0 8px 24px rgba(15, 70, 120, .10);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f4f8fc;
+      color: var(--text);
+      font-family: "Arimo", Arial, sans-serif;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .hidden { display: none !important; }
+
+    .topbar {
+      min-height: 68px;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: white;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .logout {
+      padding: 9px 13px;
+      border-radius: 8px;
+      color: white;
+      background: rgba(255,255,255,.16);
+    }
+
+    .page {
+      max-width: 1250px;
+      margin: auto;
+      padding: 22px;
+    }
+
+    .auth-wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #eaf5ff, #f8fbff);
+    }
+
+    .auth-card {
+      width: min(430px, 100%);
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .auth-title {
+      color: var(--blue);
+      text-align: center;
+      margin: 0 0 7px;
+    }
+
+    .auth-subtitle {
+      color: var(--muted);
+      text-align: center;
+      margin: 0 0 24px;
+      font-size: 14px;
+    }
+
+    .tabs {
+      display: flex;
+      background: #f0f5fa;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .tab.active {
+      background: white;
+      color: var(--blue);
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,.07);
+    }
+
+    label {
+      display: block;
+      margin: 13px 0 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+      background: white;
+      color: var(--text);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(7,90,170,.10);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .primary-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 9px;
+      background: var(--blue);
+      color: white;
+      font-weight: 700;
+    }
+
+    .primary-btn:hover { background: var(--blue-dark); }
+
+    .message {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .message.success { display: block; color: var(--green); background: #eaf8f0; }
+    .message.error { display: block; color: var(--red); background: #fff0f0; }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .nav button {
+      padding: 10px 15px;
+      border-radius: 9px;
+      background: white;
+      color: var(--muted);
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    .nav button.active {
+      color: white;
+      background: var(--blue);
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .welcome {
+      margin-bottom: 18px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 5px;
+      color: var(--blue-dark);
+    }
+
+    .welcome p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--blue);
+      word-break: break-word;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      color: var(--blue-dark);
+    }
+
+    .small-btn {
+      padding: 9px 13px;
+      border-radius: 8px;
+      background: var(--blue-light);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 180px 180px 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #edf1f5;
+      text-align: left;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f5f9fd;
+      color: var(--blue-dark);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #edf2f7;
+      color: var(--muted);
+    }
+
+    .badge.approved, .badge.working { background: #e8f7ef; color: var(--green); }
+    .badge.pending { background: #fff5df; color: var(--orange); }
+    .badge.rejected, .badge.disabled { background: #ffeded; color: var(--red); }
+
+    .form-card {
+      max-width: 650px;
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 28px;
+      color: var(--muted);
+    }
+
+    .loader {
+      color: var(--blue);
+      padding: 18px;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .page { padding: 15px; }
+      .topbar { padding: 10px 14px; }
+      .topbar-user span { display: none; }
+      .cards { grid-template-columns: 1fr; }
+      .filters, .grid-2 { grid-template-columns: 1fr; }
+      .auth-card { padding: 23px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="authScreen" class="auth-wrap">
+    <div class="auth-card">
+      <div class="brand" style="justify-content:center;margin-bottom:20px">
+        <div class="brand-logo">SOB</div>
+      </div>
+
+      <h1 class="auth-title">SOB OA Roster</h1>
+      <p class="auth-subtitle">Daily roster and leave management</p>
+
+      <div class="tabs">
+        <button class="tab active" onclick="showAuthTab('login')">Login</button>
+        <button class="tab" onclick="showAuthTab('register')">Register</button>
+      </div>
+
+      <form id="loginForm">
+        <label>Employee ID</label>
+        <input id="loginId" required autocomplete="username">
+
+        <label>Password</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+
+        <button class="primary-btn">Login</button>
+      </form>
+
+      <form id="registerForm" class="hidden">
+        <label>Employee ID</label>
+        <input id="registerId" required>
+
+        <label>Full Name</label>
+        <input id="registerName" required>
+
+        <label>Phone</label>
+        <input id="registerPhone">
+
+        <label>Password</label>
+        <input id="registerPassword" type="password" required minlength="4">
+
+        <button class="primary-btn">Create Account</button>
+      </form>
+
+      <div id="authMessage" class="message"></div>
+    </div>
+  </div>
+
+  <div id="appScreen" class="hidden">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo">SOB</div>
+        <span>SOB OA Roster</span>
+      </div>
+      <div class="topbar-user">
+        <span id="userName"></span>
+        <button class="logout" onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <nav class="nav">
+        <button class="active" data-section="dashboard" onclick="openSection('dashboard', this)">Dashboard</button>
+        <button data-section="roster" onclick="openSection('roster', this)">Monthly Roster</button>
+        <button data-section="requests" onclick="openSection('requests', this)">My Requests</button>
+        <button data-section="newRequest" onclick="openSection('newRequest', this)">Submit Request</button>
+        <button id="adminNav" class="hidden" data-section="admin" onclick="openSection('admin', this)">Admin</button>
+      </nav>
+
+      <section id="dashboard" class="section active">
+        <div class="welcome">
+          <h2 id="welcomeText">Welcome</h2>
+          <p id="todayText"></p>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="stat-label">Today's Duty</div>
+            <div id="todayDuty" class="stat-value">Loading...</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Tomorrow's Duty</div>
+            <div id="tomorrowDuty" class="stat-value">Loading...</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">Pending Requests</div>
+            <div id="pendingCount" class="stat-value">0</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-head">
+            <h3>Recent Roster</h3>
+            <button class="small-btn" onclick="loadDashboard()">Refresh</button>
+          </div>
+          <div id="recentRoster"></div>
+        </div>
+      </section>
+
+      <section id="roster" class="section">
+        <div class="section-head">
+          <h3>Monthly Roster</h3>
+          <button class="small-btn" onclick="loadRoster()">Refresh</button>
+        </div>
+
+        <div class="filters">
+          <input id="rosterMonth" type="month">
+          <input id="rosterDate" type="date">
+          <div></div>
+        </div>
+
+        <div class="table-wrap">
+          <div id="rosterTable" class="loader">Loading roster...</div>
+        </div>
+      </section>
+
+      <section id="requests" class="section">
+        <div class="section-head">
+          <h3>My Requests</h3>
+          <button class="small-btn" onclick="loadRequests()">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <div id="requestsTable" class="loader">Loading requests...</div>
+        </div>
+      </section>
+
+      <section id="newRequest" class="section">
+        <div class="section-head">
+          <h3>Submit Request</h3>
+        </div>
+
+        <form id="requestForm" class="form-card">
+          <label>Request Type</label>
+          <select id="requestType" required>
+            <option value="Leave">Leave</option>
+            <option value="Half Day">Half Day</option>
+            <option value="Emergency Leave">Emergency Leave</option>
+            <option value="PPS">PPS</option>
+          </select>
+
+          <div class="grid-2">
+            <div>
+              <label>From Date</label>
+              <input id="requestFrom" type="date" required>
+            </div>
+            <div>
+              <label>To Date</label>
+              <input id="requestTo" type="date" required>
+            </div>
+          </div>
+
+          <label>Reason / Remarks</label>
+          <textarea id="requestReason" required></textarea>
+
+          <button class="primary-btn">Submit Request</button>
+          <div id="requestMessage" class="message"></div>
+        </form>
+      </section>
+
+      <section id="admin" class="section">
+        <div class="section-head">
+          <h3>Pending User Approvals</h3>
+          <button class="small-btn" onclick="loadAdmin()">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <div id="adminTable" class="loader">Loading users...</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwUYCN4HsWQ13AfswZHTxPCGPrM1RBLu-PiRIVuLyhWCL8V8MaN-vG55sQB-4gqLgDXWg/exec";
+
+    let currentUser = null;
+    let passwordHash = "";
+
+    const $ = id => document.getElementById(id);
+
+    function showAuthTab(tab) {
+      $("loginForm").classList.toggle("hidden", tab !== "login");
+      $("registerForm").classList.toggle("hidden", tab !== "register");
+      document.querySelectorAll(".tab").forEach((button, index) => {
+        button.classList.toggle("active", (tab === "login" && index === 0) || (tab === "register" && index === 1));
+      });
+      showMessage("authMessage", "", "");
+    }
+
+    function showMessage(id, text, type) {
+      const element = $(id);
+      element.textContent = text;
+      element.className = "message " + type;
+    }
+
+    async function sha256(value) {
+      const data = new TextEncoder().encode(value);
+      const hash = await crypto.subtle.digest("SHA-256", data);
+      return [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+    }
+
+    function api(action, params = {}) {
+      return new Promise((resolve, reject) => {
+        if (API_URL.includes("PASTE_YOUR")) {
+          reject(new Error("Please add your Apps Script Web App URL in index.html."));
+          return;
+        }
+
+        const callback = "sobCallback" + Date.now() + Math.floor(Math.random() * 1000);
+        const script = document.createElement("script");
+        const query = new URLSearchParams({ action, callback, ...params });
+
+        window[callback] = result => {
+          delete window[callback];
+          script.remove();
+          result && result.success ? resolve(result) : reject(new Error(result.message || "Request failed"));
+        };
+
+        script.onerror = () => {
+          delete window[callback];
+          script.remove();
+          reject(new Error("Could not connect to the server."));
+        };
+
+        script.src = API_URL + "?" + query.toString();
+        document.body.appendChild(script);
+      });
+    }
+
+    $("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      showMessage("authMessage", "Logging in...", "success");
+
+      try {
+        const id = $("loginId").value.trim().toUpperCase();
+        const hash = await sha256($("loginPassword").value);
+        const result = await api("login", { id, password: hash });
+
+        currentUser = result.user;
+        passwordHash = hash;
+        sessionStorage.setItem("sobUser", JSON.stringify(currentUser));
+        sessionStorage.setItem("sobPassword", passwordHash);
+        startApp();
+      } catch (error) {
+        showMessage("authMessage", error.message, "error");
+      }
+    });
+
+    $("registerForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      showMessage("authMessage", "Creating account...", "success");
+
+      try {
+        const result = await api("register", {
+          id: $("registerId").value.trim().toUpperCase(),
+          name: $("registerName").value.trim(),
+          phone: $("registerPhone").value.trim(),
+          password: await sha256($("registerPassword").value)
+        });
+
+        showMessage("authMessage", result.message, "success");
+        event.target.reset();
+      } catch (error) {
+        showMessage("authMessage", error.message, "error");
+      }
+    });
+
+    function startApp() {
+      $("authScreen").classList.add("hidden");
+      $("appScreen").classList.remove("hidden");
+      $("userName").textContent = currentUser.name + " (" + currentUser.id + ")";
+      $("welcomeText").textContent = "Welcome, " + currentUser.name;
+      $("todayText").textContent = new Date().toLocaleDateString(undefined, {
+        weekday: "long", day: "numeric", month: "long", year: "numeric"
+      });
+
+      if (currentUser.role === "Admin") $("adminNav").classList.remove("hidden");
+
+      const now = new Date();
+      $("rosterMonth").value = now.toISOString().slice(0, 7);
+      $("rosterDate").value = now.toISOString().slice(0, 10);
+
+      loadDashboard();
+    }
+
+    function logout() {
+      sessionStorage.clear();
+      location.reload();
+    }
+
+    function openSection(section, button) {
+      document.querySelectorAll(".section").forEach(item => item.classList.remove("active"));
+      document.querySelectorAll(".nav button").forEach(item => item.classList.remove("active"));
+      $(section).classList.add("active");
+      if (button) button.classList.add("active");
+
+      if (section === "dashboard") loadDashboard();
+      if (section === "roster") loadRoster();
+      if (section === "requests") loadRequests();
+      if (section === "admin") loadAdmin();
+    }
+
+    async function loadDashboard() {
+      try {
+        const result = await api("getRoster", {
+          id: currentUser.id,
+          password: passwordHash,
+          month: new Date().toISOString().slice(0, 7)
+        });
+
+        const rows = result.rows || [];
+        const today = new Date().toISOString().slice(0, 10);
+        const tomorrowDate = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+        const todayRow = rows.find(row => row.date === today);
+        const tomorrowRow = rows.find(row => row.date === tomorrowDate);
+
+        $("todayDuty").textContent = todayRow ? (todayRow.location || todayRow.status || "Not assigned") : "Not assigned";
+        $("tomorrowDuty").textContent = tomorrowRow ? (tomorrowRow.location || tomorrowRow.status || "Not assigned") : "Not assigned";
+
+        renderRoster(rows.slice(0, 7), "recentRoster");
+        const requests = await api("getRequests", { id: currentUser.id, password: passwordHash });
+        $("pendingCount").textContent = (requests.rows || []).filter(row => row.status === "Pending").length;
+      } catch (error) {
+        $("recentRoster").innerHTML = `<div class="empty">${error.message}</div>`;
+      }
+    }
+
+    async function loadRoster() {
+      $("rosterTable").innerHTML = '<div class="loader">Loading roster...</div>';
+
+      try {
+        const result = await api("getRoster", {
+          id: currentUser.id,
+          password: passwordHash,
+          month: $("rosterMonth").value
+        });
+        renderRoster(result.rows || [], "rosterTable");
+      } catch (error) {
+        $("rosterTable").innerHTML = `<div class="empty">${error.message}</div>`;
+      }
+    }
+
+    $("rosterMonth").addEventListener("change", loadRoster);
+    $("rosterDate").addEventListener("change", async () => {
+      const rows = await getRosterForCurrentMonth();
+      renderRoster(rows.filter(row => row.date === $("rosterDate").value), "rosterTable");
+    });
+
+    async function getRosterForCurrentMonth() {
+      const result = await api("getRoster", {
+        id: currentUser.id,
+        password: passwordHash,
+        month: $("rosterMonth").value
+      });
+      return result.rows || [];
+    }
+
+    function renderRoster(rows, targetId) {
+      if (!rows.length) {
+        $(targetId).innerHTML = '<div class="empty">No roster entries found.</div>';
+        return;
+      }
+
+      $(targetId).innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Location</th><th>Shift</th><th>Status</th><th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(row => `
+              <tr>
+                <td>${escapeHtml(row.date)}</td>
+                <td>${escapeHtml(row.location || "—")}</td>
+                <td>${escapeHtml(row.shift || "—")}</td>
+                <td><span class="badge ${statusClass(row.status)}">${escapeHtml(row.status || "Working")}</span></td>
+                <td>${escapeHtml(row.remarks || "—")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>`;
+    }
+
+    async function loadRequests() {
+      $("requestsTable").innerHTML = '<div class="loader">Loading requests...</div>';
+
+      try {
+        const result = await api("getRequests", { id: currentUser.id, password: passwordHash });
+        const rows = result.rows || [];
+
+        if (!rows.length) {
+          $("requestsTable").innerHTML = '<div class="empty">No requests submitted.</div>';
+          return;
+        }
+
+        $("requestsTable").innerHTML = `
+          <table>
+            <thead>
+              <tr><th>Submitted</th><th>Dates</th><th>Type</th><th>Reason</th><th>Status</th><th>Approved By</th></tr>
+            </thead>
+            <tbody>
+              ${rows.map(row => `
+                <tr>
+                  <td>${escapeHtml(row.submitted)}</td>
+                  <td>${escapeHtml(row.fromDate)} to ${escapeHtml(row.toDate)}</td>
+                  <td>${escapeHtml(row.type)}</td>
+                  <td>${escapeHtml(row.reason)}</td>
+                  <td><span class="badge ${statusClass(row.status)}">${escapeHtml(row.status)}</span></td>
+                  <td>${escapeHtml(row.approvedBy || "—")}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>`;
+      } catch (error) {
+        $("requestsTable").innerHTML = `<div class="empty">${error.message}</div>`;
+      }
+    }
+
+    $("requestForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      showMessage("requestMessage", "Submitting request...", "success");
+
+      try {
+        const result = await api("submitRequest", {
+          id: currentUser.id,
+          password: passwordHash,
+          type: $("requestType").value,
+          fromDate: $("requestFrom").value,
+          toDate: $("requestTo").value,
+          reason: $("requestReason").value.trim()
+        });
+
+        showMessage("requestMessage", result.message, "success");
+        event.target.reset();
+      } catch (error) {
+        showMessage("requestMessage", error.message, "error");
+      }
+    });
+
+    async function loadAdmin() {
+      $("adminTable").innerHTML = '<div class="loader">Loading users...</div>';
+
+      try {
+        const result = await api("getPendingUsers", {
+          id: currentUser.id,
+          password: passwordHash
+        });
+        const rows = result.rows || [];
+
+        if (!rows.length) {
+          $("adminTable").innerHTML = '<div class="empty">No pending users.</div>';
+          return;
+        }
+
+        $("adminTable").innerHTML = `
+          <table>
+            <thead>
+              <tr><th>Employee ID</th><th>Name</th><th>Phone</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              ${rows.map(row => `
+                <tr>
+                  <td>${escapeHtml(row.id)}</td>
+                  <td>${escapeHtml(row.name)}</td>
+                  <td>${escapeHtml(row.phone || "—")}</td>
+                  <td><span class="badge pending">${escapeHtml(row.status)}</span></td>
+                  <td>
+                    <button class="small-btn" onclick="adminAction('approve','${encodeURIComponent(row.id)}')">Approve</button>
+                    <button class="small-btn" onclick="adminAction('reject','${encodeURIComponent(row.id)}')">Reject</button>
+                    <button class="small-btn" onclick="adminAction('disable','${encodeURIComponent(row.id)}')">Disable</button>
+                  </td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>`;
+      } catch (error) {
+        $("adminTable").innerHTML = `<div class="empty">${error.message}</div>`;
+      }
+    }
+
+    async function adminAction(action, encodedId) {
+      const id = decodeURIComponent(encodedId);
+      if (!confirm(`${action} ${id}?`)) return;
+
+      try {
+        await api(action, {
+          id: currentUser.id,
+          password: passwordHash,
+          targetId: id
+        });
+        loadAdmin();
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    function statusClass(status) {
+      status = String(status || "").toLowerCase();
+      if (status.includes("approved") || status.includes("working")) return "approved";
+      if (status.includes("pending")) return "pending";
+      if (status.includes("reject") || status.includes("disable")) return "rejected";
+      return "";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    const savedUser = sessionStorage.getItem("sobUser");
+    const savedPassword = sessionStorage.getItem("sobPassword");
+
+    if (savedUser && savedPassword) {
+      currentUser = JSON.parse(savedUser);
+      passwordHash = savedPassword;
+      startApp();
+    }
+  </script>
+</body>
+</html>
