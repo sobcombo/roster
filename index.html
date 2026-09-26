@@ -504,6 +504,13 @@
       font-weight: 800;
     }
 
+    .quick-add-location {
+      justify-content: center;
+      width: 100%;
+      min-height: 48px;
+      margin: 0 0 18px;
+    }
+
     .plus {
       display: inline-grid;
       place-items: center;
@@ -539,6 +546,24 @@
 
     .field label {
       margin-top: 0;
+    }
+
+    .shift-time-inputs {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 7px;
+    }
+
+    .shift-time-inputs input {
+      min-width: 0;
+      padding: 10px 8px;
+    }
+
+    .shift-time-inputs span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
     }
 
     .remove-location {
@@ -1337,6 +1362,11 @@
           <pre id="rosterMessage" class="roster-message">Loading today's roster…</pre>
         </div>
 
+        <button id="addLocationButton" type="button" class="add-location-btn quick-add-location">
+          <span class="plus">+</span>
+          Add location
+        </button>
+
         <details class="roster-editor">
           <summary>Manage daily roster</summary>
         <div class="hero">
@@ -1380,10 +1410,6 @@
 
         <div class="locations-head">
           <h3>Locations and assigned staff</h3>
-          <button id="addLocationButton" type="button" class="add-location-btn">
-            <span class="plus">+</span>
-            Add location
-          </button>
         </div>
 
         <div id="locationsList" class="locations-list"></div>
@@ -1884,6 +1910,7 @@
     }
 
     function addLocation() {
+      document.querySelector(".roster-editor").open = true;
       state.locations.push({
         id: createId(),
         locationName: "",
@@ -1942,6 +1969,38 @@
       location[field] = value;
       markDirty();
       renderRosterMessage();
+    }
+
+    function updateShiftTime(locationId) {
+      const card = [...document.querySelectorAll("[data-location-id]")]
+        .find(item => item.dataset.locationId === locationId);
+      const inputs = card?.querySelectorAll('.shift-time-inputs input');
+      const location = state.locations.find(item => item.id === locationId);
+      if (!location || !inputs || inputs.length !== 2) return;
+
+      const start = inputs[0].value;
+      const end = inputs[1].value;
+      location.shift = start && end ? `${start}–${end}` : "";
+      markDirty();
+      renderRosterMessage();
+    }
+
+    function parseShiftTimes(value) {
+      const matches = [...String(value || "").matchAll(/(\d{1,2}):(\d{2})\s*(AM|PM)?/gi)];
+      const toTimeValue = match => {
+        let hours = Number(match[1]);
+        const minutes = Number(match[2]);
+        const meridiem = (match[3] || "").toUpperCase();
+        if (minutes > 59 || hours > 24 || (meridiem && (hours < 1 || hours > 12))) return "";
+        if (meridiem) hours = (hours % 12) + (meridiem === "PM" ? 12 : 0);
+        if (hours > 23) return "";
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+      };
+
+      return {
+        start: matches[0] ? toTimeValue(matches[0]) : "",
+        end: matches[1] ? toTimeValue(matches[1]) : ""
+      };
     }
 
     function updateStaff(locationId, staffIndex, field, value) {
@@ -2038,13 +2097,23 @@
               </select>
             </div>
 
-            <div class="field">
-              <label>Shift / timing</label>
-              <input
-                value="${escapeHtml(location.shift || "")}"
-                placeholder="e.g. A / 06:00–14:00"
-                oninput="updateLocation('${escapeJs(location.id)}', 'shift', this.value)"
-              />
+                        <div class="field shift-field">
+              <label>Shift time</label>
+              <div class="shift-time-inputs">
+                <input
+                  type="time"
+                  aria-label="Shift start time"
+                  value="${escapeHtml(parseShiftTimes(location.shift).start)}"
+                  onchange="updateShiftTime('${escapeJs(location.id)}')"
+                />
+                <span aria-hidden="true">to</span>
+                <input
+                  type="time"
+                  aria-label="Shift end time"
+                  value="${escapeHtml(parseShiftTimes(location.shift).end)}"
+                  onchange="updateShiftTime('${escapeJs(location.id)}')"
+                />
+              </div>
             </div>
 
             <div class="field">
@@ -2573,6 +2642,7 @@
       renderLocations() and renderCalendar(), so they must remain global.
     */
     window.updateLocation = updateLocation;
+    window.updateShiftTime = updateShiftTime;
     window.handleLocationSelection = handleLocationSelection;
     window.updateStaff = updateStaff;
     window.removeLocation = removeLocation;
