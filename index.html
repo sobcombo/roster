@@ -926,7 +926,127 @@
       }
     }
 
+    @media (max-width: 820px) {
+      .topbar {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .page {
+        padding-top: 20px;
+      }
+
+      input,
+      select,
+      .secondary-btn,
+      .primary-btn {
+        min-height: 46px;
+      }
+
+      .remove-location,
+      .remove-staff,
+      .password-toggle,
+      .calendar-actions button,
+      .add-staff-btn {
+        min-width: 44px;
+        min-height: 44px;
+      }
+
+      .password-toggle {
+        top: 2px;
+        right: 4px;
+        width: 42px;
+        height: 42px;
+      }
+    }
+
+    .welcome-card,
+    .roster-message-card {
+      padding: 18px;
+      margin-bottom: 16px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .welcome-card h2 {
+      margin: 0 0 7px;
+      font-size: 22px;
+      letter-spacing: -0.6px;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .roster-message-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .roster-message-head h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .roster-editor {
+      margin-top: 18px;
+    }
+
+    .roster-editor > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 13px 16px;
+      color: var(--black);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      list-style: none;
+    }
+
+    .roster-editor > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .roster-editor[open] > summary {
+      margin-bottom: 16px;
+    }
+
+    .roster-message {
+      overflow-wrap: anywhere;
+      margin: 0;
+      padding: 13px;
+      color: var(--dark);
+      background: var(--soft);
+      border-radius: 10px;
+      font: inherit;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+
     @media (max-width: 620px) {
+      body {
+        padding-bottom: calc(74px + env(safe-area-inset-bottom));
+      }
+
+      .auth-screen {
+        padding: 16px;
+      }
+
       .auth-card {
         padding: 30px 22px;
       }
@@ -984,6 +1104,124 @@
       .calendar-toolbar {
         align-items: flex-start;
         flex-direction: column;
+      }
+
+      .nav {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 60;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin: 0;
+        padding: 9px 10px calc(9px + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, 0.97);
+        border-top: 1px solid var(--line);
+        backdrop-filter: blur(16px);
+      }
+
+      .nav button {
+        min-height: 44px;
+        padding: 8px 5px;
+        font-size: 11px;
+      }
+
+      .page {
+        padding: 18px 12px 20px;
+      }
+
+      .hero h2 {
+        font-size: 25px;
+      }
+
+      .toolbar,
+      .location-card,
+      .welcome-card,
+      .roster-message-card {
+        padding: 14px;
+      }
+
+      .toolbar-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toolbar-actions button {
+        min-height: 46px;
+        padding: 8px;
+        font-size: 11px;
+      }
+
+      .locations-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .add-location-btn {
+        justify-content: center;
+        min-height: 46px;
+      }
+
+      .location-top {
+        padding-top: 34px;
+      }
+
+      .remove-location {
+        top: 10px;
+        right: 10px;
+      }
+
+      .staff-row {
+        grid-template-columns: minmax(0, 1fr) 44px;
+      }
+
+      .staff-row select,
+      .staff-row input {
+        min-height: 46px;
+        font-size: 13px;
+      }
+
+      .staff-row input {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .staff-row .remove-staff {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+      }
+
+      .save-bar {
+        position: sticky;
+        bottom: calc(76px + env(safe-area-inset-bottom));
+        padding: 11px;
+      }
+
+      .save-bar .primary-btn {
+        min-height: 48px;
+      }
+
+      .calendar-wrap {
+        overflow-x: auto;
+      }
+
+      .calendar-grid {
+        min-width: 560px;
+      }
+
+      .calendar-day {
+        min-height: 78px;
+      }
+
+      .roster-message-head {
+        align-items: flex-start;
+      }
+
+      .roster-message-head .secondary-btn {
+        min-height: 42px;
+        white-space: nowrap;
       }
     }
   </style>
@@ -1086,6 +1324,21 @@
 
       <!-- DAILY ROSTER -->
       <section id="dailySection" class="section active">
+        <div class="welcome-card">
+          <h2 id="welcomeTitle">Hi there!</h2>
+          <p id="welcomeMessage">Hope you're having a good day.</p>
+        </div>
+
+        <div class="roster-message-card">
+          <div class="roster-message-head">
+            <h3>Today's roster message</h3>
+            <button id="copyRosterMessageButton" type="button" class="secondary-btn">Copy roster</button>
+          </div>
+          <pre id="rosterMessage" class="roster-message">Loading today's roster…</pre>
+        </div>
+
+        <details class="roster-editor">
+          <summary>Manage daily roster</summary>
         <div class="hero">
           <div>
             <h2>Prepare daily roster</h2>
@@ -1146,6 +1399,7 @@
             Save daily roster
           </button>
         </div>
+        </details>
       </section>
 
       <!-- MONTHLY CALENDAR -->
@@ -1202,29 +1456,6 @@
     </main>
   </section>
 
-  <!-- ADD LOCATION MODAL -->
-  <div id="locationModal" class="modal-backdrop hidden">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="locationModalTitle">
-      <div class="modal-head">
-        <h3 id="locationModalTitle">Add location</h3>
-        <button id="closeLocationModal" type="button" class="modal-close" aria-label="Close">×</button>
-      </div>
-
-      <label for="locationSelect">Choose saved location</label>
-      <select id="locationSelect"></select>
-
-      <label for="newLocationName">Or type a new location</label>
-      <input id="newLocationName" placeholder="e.g. Terminal 2 Arrival" />
-
-      <div style="display:flex; gap:8px; margin-top:18px;">
-        <button id="cancelLocationButton" type="button" class="secondary-btn" style="flex:1;">Cancel</button>
-        <button id="confirmLocationButton" type="button" class="primary-btn" style="flex:1; margin:0;">
-          Add location
-        </button>
-      </div>
-    </div>
-  </div>
-
   <script>
     /*
       The Code.gs version supplied next should support these actions:
@@ -1232,6 +1463,7 @@
       login
       register
       getBootstrap
+      saveLocation
       getDailyRoster
       copyPreviousLocations
       saveDailyRoster
@@ -1253,6 +1485,7 @@
       supervisor: "",
       calendarMonth: "",
       monthlyRows: [],
+      supervisors: ["Aarti Paliwal", "Ankit Deshantri", "Ankush Jain", "Jaswant Prajapat", "Jitendra Singh Solanki"],
       isDirty: false,
       loading: false
     };
@@ -1313,15 +1546,8 @@
         await loadDailyRoster();
       });
 
-      $("addLocationButton").addEventListener("click", openLocationModal);
-      $("closeLocationModal").addEventListener("click", closeLocationModal);
-      $("cancelLocationButton").addEventListener("click", closeLocationModal);
-      $("confirmLocationButton").addEventListener("click", confirmAddLocation);
-
-      $("locationModal").addEventListener("click", event => {
-        if (event.target === $("locationModal")) closeLocationModal();
-      });
-
+      $("addLocationButton").addEventListener("click", addLocation);
+      $("copyRosterMessageButton").addEventListener("click", copyRosterMessage);
       $("rosterSupervisor").addEventListener("change", handleSupervisorSelection);
       $("copyPreviousButton").addEventListener("click", copyPreviousLocations);
       $("clearAssignmentsButton").addEventListener("click", clearStaffAssignments);
@@ -1365,13 +1591,15 @@
 
     function handleSupervisorSelection() {
       const select = $("rosterSupervisor");
-      if (select.value === "__create_supervisor__") {
-        const name = prompt("Enter the supervisor's name:");
-        if (name && name.trim()) {
-          state.supervisor = name.trim();
+      if (select.value === "__add_supervisor__") {
+        const name = titleCaseName(prompt("Enter the new name:"));
+        if (name) {
+          state.supervisor = name;
+          state.supervisors = [...new Set([...state.supervisors, name])]
+            .sort((a, b) => a.localeCompare(b));
           renderSupervisorOptions();
-          select.value = state.supervisor;
           markDirty();
+          renderRosterMessage();
         } else {
           select.value = state.supervisor;
         }
@@ -1380,16 +1608,18 @@
 
       state.supervisor = select.value;
       markDirty();
+      renderRosterMessage();
     }
 
     function renderSupervisorOptions() {
       const select = $("rosterSupervisor");
-      const names = [...new Set(state.staff.map(member => member.name).filter(Boolean))];
+      const names = [...new Set(state.supervisors.map(titleCaseName).filter(Boolean))];
       if (state.supervisor && !names.includes(state.supervisor)) names.push(state.supervisor);
+      names.sort((a, b) => a.localeCompare(b));
 
-      select.innerHTML = '<option value="">Select supervisor</option>' +
+      select.innerHTML = '<option value="">Select supervisor (optional)</option>' +
         names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("") +
-        '<option value="__create_supervisor__">＋ Create new supervisor…</option>';
+        '<option value="__add_supervisor__">＋ Add new name</option>';
       select.value = state.supervisor;
     }
 
@@ -1427,7 +1657,7 @@
       event.preventDefault();
 
       const username = $("registerUsername").value.trim().toLowerCase();
-      const name = $("registerName").value.trim();
+      const name = titleCaseName($("registerName").value);
       const phone = $("registerPhone").value.trim();
       const password = $("registerPassword").value.trim();
 
@@ -1456,7 +1686,7 @@
     async function startApp() {
       $("authScreen").classList.add("hidden");
       $("appScreen").classList.remove("hidden");
-      $("userPill").textContent = state.user.name || state.user.username;
+      $("userPill").textContent = titleCaseName(state.user.name || state.user.username);
 
       await Promise.all([loadBootstrap(), loadDailyRoster()]);
       renderLocations();
@@ -1473,12 +1703,19 @@
       try {
         const result = await api("getBootstrap", authParams());
 
-        state.staff = Array.isArray(result.staff) ? result.staff : [];
+        state.staff = (Array.isArray(result.staff) ? result.staff : [])
+          .map(member => ({ ...member, name: titleCaseName(member.name) }))
+          .sort((a, b) => a.name.localeCompare(b.name));
         state.savedLocations = Array.isArray(result.locations) ? result.locations : [];
+        if (Array.isArray(result.supervisors)) {
+          state.supervisors = [...new Set([
+            ...state.supervisors,
+            ...result.supervisors.map(titleCaseName).filter(Boolean)
+          ])].sort((a, b) => a.localeCompare(b));
+        }
 
         renderTeamTable();
         renderSupervisorOptions();
-        refreshLocationModalOptions();
       } catch (error) {
         showDailyStatus(error.message, "error");
       }
@@ -1495,7 +1732,7 @@
         });
 
         state.locations = normaliseLocations(result.locations || []);
-        state.supervisor = normaliseText(result.supervisor || "");
+        state.supervisor = titleCaseName(result.supervisor || "");
         state.isDirty = false;
 
         renderSupervisorOptions();
@@ -1529,6 +1766,74 @@
         $("dayNote").innerHTML =
           `<strong>${formatLongDate(state.rosterDate)}</strong><br>` +
           `No roster has been saved for this date.`;
+      }
+    }
+
+    function renderRosterMessage() {
+      const dateText = formatLongDate(state.rosterDate);
+      const lines = [`Majdur Sena Daily Roster — ${dateText}`];
+      if (state.supervisor) lines.push(`Created by: ${titleCaseName(state.supervisor)}`);
+
+      if (!state.locations.length) {
+        lines.push("No locations or assignments have been added yet.");
+      } else {
+        state.locations.forEach(location => {
+          const heading = [titleCaseName(location.locationName), normaliseText(location.shift)]
+            .filter(Boolean).join(" — ");
+          lines.push("", heading || "Location");
+          if (location.remarks) lines.push(`Note: ${location.remarks}`);
+          const assigned = location.staff.filter(entry => entry.username);
+          if (!assigned.length) lines.push("Staff: Not assigned yet");
+          assigned.forEach(entry => {
+            const name = titleCaseName(entry.name || getStaffName(entry.username));
+            lines.push(`• ${name}${entry.duty ? ` — ${entry.duty}` : ""}`);
+          });
+        });
+      }
+      $("rosterMessage").textContent = lines.join("\n");
+
+      const firstName = titleCaseName(state.user?.name || state.user?.username || "there").split(" ")[0];
+      const mine = state.locations.find(location =>
+        location.staff.some(entry => entry.username === state.user?.username)
+      );
+      const greetings = [
+        "Hope you're having a good day.",
+        "Wishing you a smooth and positive shift today.",
+        "Hope you're in a great mood and ready for a good day.",
+        "Have a safe, calm, and successful shift!"
+      ];
+      let message = mine
+        ? `You're at ${titleCaseName(mine.locationName) || "your assigned location"}${mine.shift ? ` in the ${mine.shift} shift` : ""}.`
+        : "Your assignment is not listed in today's roster yet.";
+
+      if (mine) {
+        const reliever = mine.staff.find(entry =>
+          entry.username !== state.user?.username && /reliev/i.test(entry.duty || "")
+        );
+        message += reliever
+          ? ` Your reliever is ${titleCaseName(reliever.name || getStaffName(reliever.username))}.`
+          : " Your reliever hasn't been specified in the roster.";
+      }
+      message += ` ${greetings[Math.floor(Math.random() * greetings.length)]}`;
+      $("welcomeTitle").textContent = `Hi ${firstName}!`;
+      $("welcomeMessage").textContent = message;
+    }
+
+    async function copyRosterMessage() {
+      const text = $("rosterMessage").textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        showDailyStatus("Roster message copied.", "success");
+      } catch (error) {
+        const temporary = document.createElement("textarea");
+        temporary.value = text;
+        temporary.style.position = "fixed";
+        temporary.style.opacity = "0";
+        document.body.appendChild(temporary);
+        temporary.select();
+        const copied = document.execCommand("copy");
+        temporary.remove();
+        showDailyStatus(copied ? "Roster message copied." : "Could not copy the roster message.", copied ? "success" : "error");
       }
     }
 
@@ -1578,58 +1883,10 @@
       updateSummary();
     }
 
-    function openLocationModal() {
-      refreshLocationModalOptions();
-      $("locationSelect").value = "";
-      $("newLocationName").value = "";
-      $("locationModal").classList.remove("hidden");
-      setTimeout(() => $("locationSelect").focus(), 50);
-    }
-
-    function closeLocationModal() {
-      $("locationModal").classList.add("hidden");
-    }
-
-    function refreshLocationModalOptions() {
-      const usedNames = new Set(
-        state.locations.map(item => normaliseText(item.locationName).toLowerCase())
-      );
-
-      const available = state.savedLocations.filter(item => {
-        const name = locationNameFromItem(item);
-        return name && !usedNames.has(name.toLowerCase());
-      });
-
-      $("locationSelect").innerHTML =
-        `<option value="">Select saved location</option>` +
-        available.map(item => {
-          const name = locationNameFromItem(item);
-          return `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`;
-        }).join("");
-    }
-
-    function confirmAddLocation() {
-      const selected = $("locationSelect").value.trim();
-      const typed = $("newLocationName").value.trim();
-      const locationName = typed || selected;
-
-      if (!locationName) {
-        alert("Choose or enter a location.");
-        return;
-      }
-
-      const duplicate = state.locations.some(
-        item => item.locationName.trim().toLowerCase() === locationName.toLowerCase()
-      );
-
-      if (duplicate) {
-        alert("This location is already added.");
-        return;
-      }
-
+    function addLocation() {
       state.locations.push({
         id: createId(),
-        locationName,
+        locationName: "",
         shift: "",
         remarks: "",
         staff: [{ username: "", name: "", duty: "" }]
@@ -1638,7 +1895,8 @@
       markDirty();
       renderLocations();
       updateSummary();
-      closeLocationModal();
+      const lastLocation = $("locationsList").lastElementChild;
+      lastLocation?.querySelector("select")?.focus();
     }
 
     function removeLocation(locationId) {
@@ -1683,6 +1941,7 @@
 
       location[field] = value;
       markDirty();
+      renderRosterMessage();
     }
 
     function updateStaff(locationId, staffIndex, field, value) {
@@ -1699,25 +1958,26 @@
 
       markDirty();
       updateSummary();
+      renderRosterMessage();
     }
 
     function renderLocationOptions(currentName) {
-      const names = [...new Set(state.savedLocations.map(locationNameFromItem).filter(Boolean))];
+      const names = [...new Set(state.savedLocations.map(locationNameFromItem).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b));
       if (currentName && !names.some(name => name.toLowerCase() === currentName.toLowerCase())) {
         names.push(currentName);
       }
 
-      return `<option value="" ${currentName ? "" : "selected"} disabled>Select a saved location</option>` +
+      return `<option value="" ${currentName ? "" : "selected"} disabled>Select a location</option>` +
         names.map(name =>
           `<option value="${escapeHtml(name)}" ${name === currentName ? "selected" : ""}>${escapeHtml(name)}</option>`
-        ).join("") + '<option value="__create_location__">＋ Create new location…</option>';
+        ).join("") + '<option value="__add_location__">＋ Create new location…</option>';
     }
 
     function handleLocationSelection(locationId, select) {
-      if (select.value === "__create_location__") {
+      if (select.value === "__add_location__") {
         const previousName = state.locations.find(item => item.id === locationId)?.locationName || "";
-        const name = prompt("Enter the new location name:");
-        const cleanName = normaliseText(name);
+        const cleanName = titleCaseName(prompt("Enter the new location name:"));
 
         if (!cleanName) {
           select.value = previousName;
@@ -1736,12 +1996,24 @@
         updateLocation(locationId, "locationName", cleanName);
         if (!state.savedLocations.some(item => locationNameFromItem(item).toLowerCase() === cleanName.toLowerCase())) {
           state.savedLocations.push({ locationName: cleanName });
+          saveLocationToSheet(cleanName);
         }
         renderLocations();
+        renderRosterMessage();
         return;
       }
 
       updateLocation(locationId, "locationName", select.value);
+      renderRosterMessage();
+    }
+
+    async function saveLocationToSheet(name) {
+      try {
+        await api("saveLocation", { ...authParams(), locationName: name });
+        showDailyStatus(`${name} added to saved locations.`, "success");
+      } catch (error) {
+        showDailyStatus(`Could not save ${name}: ${error.message}`, "error");
+      }
     }
 
     function renderLocations() {
@@ -1750,7 +2022,7 @@
       if (!state.locations.length) {
         container.innerHTML = "";
         $("emptyLocations").classList.remove("hidden");
-        refreshLocationModalOptions();
+        renderRosterMessage();
         return;
       }
 
@@ -1809,8 +2081,7 @@
           </div>
         </article>
       `).join("");
-
-      refreshLocationModalOptions();
+      renderRosterMessage();
     }
 
     function renderStaffRow(location, staffEntry, staffIndex) {
@@ -1839,7 +2110,7 @@
 
           <input
             value="${escapeHtml(staffEntry.duty || "")}"
-            placeholder="Duty / post (optional)"
+            placeholder="Duty (e.g. Reliever)"
             aria-label="Duty or post"
             oninput="updateStaff('${escapeJs(location.id)}', ${staffIndex}, 'duty', this.value)"
           />
@@ -1926,7 +2197,7 @@
             .filter(entry => entry.username)
             .map(entry => ({
               username: entry.username,
-              name: entry.name || getStaffName(entry.username),
+              name: titleCaseName(entry.name || getStaffName(entry.username)),
               duty: normaliseText(entry.duty)
             }))
         }))
@@ -2169,6 +2440,14 @@
 
     function normaliseText(value) {
       return String(value ?? "").trim();
+    }
+
+    function titleCaseName(value) {
+      return normaliseText(value)
+        .toLocaleLowerCase()
+        .split(/\s+/)
+        .map(word => word ? word.charAt(0).toLocaleUpperCase() + word.slice(1) : "")
+        .join(" ");
     }
 
     function validatePassword(value) {
