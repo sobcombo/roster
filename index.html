@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#111111" />
   <title>Majdur Sena Daily Roster</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23111111'/%3E%3Ctext x='32' y='40' text-anchor='middle' font-family='Arial,sans-serif' font-size='22' font-weight='800' fill='white'%3EMS%3C/text%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -182,14 +183,45 @@
 
     .password-toggle {
       position: absolute;
-      top: 7px;
-      right: 8px;
-      padding: 6px 8px;
+      top: 6px;
+      right: 7px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 6px;
       color: var(--muted);
       background: transparent;
       border: 0;
-      font-size: 11px;
-      font-weight: 800;
+      border-radius: 7px;
+    }
+
+    .password-toggle:hover {
+      color: var(--black);
+      background: var(--soft);
+    }
+
+    .password-toggle svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .roster-meta {
+      max-width: 460px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .roster-meta label {
+      margin-top: 0;
     }
 
     .primary-btn,
@@ -964,7 +996,7 @@
       <div class="logo">MS</div>
       <h1>Majdur Sena Roster</h1>
       <p class="subtitle">
-        One shared workspace for the whole team to prepare and view the daily location roster.
+        yaha aao, apni location add karo, aur dekho aaram se roster
       </p>
 
       <div class="tabs">
@@ -989,7 +1021,9 @@
             autocomplete="current-password"
             placeholder="4–6 digits"
           />
-          <button type="button" class="password-toggle" data-password-target="loginPassword">SHOW</button>
+          <button type="button" class="password-toggle" data-password-target="loginPassword" aria-label="Show password">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
 
         <button class="primary-btn" type="submit">Sign in</button>
@@ -1017,7 +1051,9 @@
             maxlength="6"
             placeholder="4–6 digits"
           />
-          <button type="button" class="password-toggle" data-password-target="registerPassword">SHOW</button>
+          <button type="button" class="password-toggle" data-password-target="registerPassword" aria-label="Show password">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
 
         <button class="primary-btn" type="submit">Create account</button>
@@ -1078,6 +1114,13 @@
               Clear staff
             </button>
           </div>
+        </div>
+
+        <div class="roster-meta">
+          <label for="rosterSupervisor">Roster created by (optional)</label>
+          <select id="rosterSupervisor">
+            <option value="">Select supervisor</option>
+          </select>
         </div>
 
         <div id="dailyStatus" class="status-strip"></div>
@@ -1207,6 +1250,7 @@
       savedLocations: [],
       rosterDate: "",
       locations: [],
+      supervisor: "",
       calendarMonth: "",
       monthlyRows: [],
       isDirty: false,
@@ -1278,6 +1322,7 @@
         if (event.target === $("locationModal")) closeLocationModal();
       });
 
+      $("rosterSupervisor").addEventListener("change", handleSupervisorSelection);
       $("copyPreviousButton").addEventListener("click", copyPreviousLocations);
       $("clearAssignmentsButton").addEventListener("click", clearStaffAssignments);
       $("saveRosterButton").addEventListener("click", saveDailyRoster);
@@ -1312,7 +1357,40 @@
       const input = $(id);
       const showing = input.type === "text";
       input.type = showing ? "password" : "text";
-      button.textContent = showing ? "SHOW" : "HIDE";
+      button.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      button.innerHTML = showing
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18M10.6 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a15 15 0 0 1-3.1 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1.4 0 2.7-.4 3.8-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+    }
+
+    function handleSupervisorSelection() {
+      const select = $("rosterSupervisor");
+      if (select.value === "__create_supervisor__") {
+        const name = prompt("Enter the supervisor's name:");
+        if (name && name.trim()) {
+          state.supervisor = name.trim();
+          renderSupervisorOptions();
+          select.value = state.supervisor;
+          markDirty();
+        } else {
+          select.value = state.supervisor;
+        }
+        return;
+      }
+
+      state.supervisor = select.value;
+      markDirty();
+    }
+
+    function renderSupervisorOptions() {
+      const select = $("rosterSupervisor");
+      const names = [...new Set(state.staff.map(member => member.name).filter(Boolean))];
+      if (state.supervisor && !names.includes(state.supervisor)) names.push(state.supervisor);
+
+      select.innerHTML = '<option value="">Select supervisor</option>' +
+        names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("") +
+        '<option value="__create_supervisor__">＋ Create new supervisor…</option>';
+      select.value = state.supervisor;
     }
 
     async function handleLogin(event) {
@@ -1380,8 +1458,9 @@
       $("appScreen").classList.remove("hidden");
       $("userPill").textContent = state.user.name || state.user.username;
 
-      await loadBootstrap();
-      await loadDailyRoster();
+      await Promise.all([loadBootstrap(), loadDailyRoster()]);
+      renderLocations();
+      updateSummary();
     }
 
     function logout() {
@@ -1398,6 +1477,7 @@
         state.savedLocations = Array.isArray(result.locations) ? result.locations : [];
 
         renderTeamTable();
+        renderSupervisorOptions();
         refreshLocationModalOptions();
       } catch (error) {
         showDailyStatus(error.message, "error");
@@ -1415,8 +1495,10 @@
         });
 
         state.locations = normaliseLocations(result.locations || []);
+        state.supervisor = normaliseText(result.supervisor || "");
         state.isDirty = false;
 
+        renderSupervisorOptions();
         renderLocations();
         updateDayNote(result);
         updateSummary();
@@ -1619,6 +1701,49 @@
       updateSummary();
     }
 
+    function renderLocationOptions(currentName) {
+      const names = [...new Set(state.savedLocations.map(locationNameFromItem).filter(Boolean))];
+      if (currentName && !names.some(name => name.toLowerCase() === currentName.toLowerCase())) {
+        names.push(currentName);
+      }
+
+      return `<option value="" ${currentName ? "" : "selected"} disabled>Select a saved location</option>` +
+        names.map(name =>
+          `<option value="${escapeHtml(name)}" ${name === currentName ? "selected" : ""}>${escapeHtml(name)}</option>`
+        ).join("") + '<option value="__create_location__">＋ Create new location…</option>';
+    }
+
+    function handleLocationSelection(locationId, select) {
+      if (select.value === "__create_location__") {
+        const previousName = state.locations.find(item => item.id === locationId)?.locationName || "";
+        const name = prompt("Enter the new location name:");
+        const cleanName = normaliseText(name);
+
+        if (!cleanName) {
+          select.value = previousName;
+          return;
+        }
+
+        const duplicate = state.locations.some(item =>
+          item.id !== locationId && item.locationName.toLowerCase() === cleanName.toLowerCase()
+        );
+        if (duplicate) {
+          alert("This location is already added to this roster.");
+          select.value = previousName;
+          return;
+        }
+
+        updateLocation(locationId, "locationName", cleanName);
+        if (!state.savedLocations.some(item => locationNameFromItem(item).toLowerCase() === cleanName.toLowerCase())) {
+          state.savedLocations.push({ locationName: cleanName });
+        }
+        renderLocations();
+        return;
+      }
+
+      updateLocation(locationId, "locationName", select.value);
+    }
+
     function renderLocations() {
       const container = $("locationsList");
 
@@ -1636,11 +1761,9 @@
           <div class="location-top">
             <div class="field location-field">
               <label>Location ${locationIndex + 1}</label>
-              <input
-                value="${escapeHtml(location.locationName)}"
-                placeholder="Location name"
-                oninput="updateLocation('${escapeJs(location.id)}', 'locationName', this.value)"
-              />
+              <select onchange="handleLocationSelection('${escapeJs(location.id)}', this)">
+                ${renderLocationOptions(location.locationName)}
+              </select>
             </div>
 
             <div class="field">
@@ -1761,10 +1884,18 @@
         const result = await api("saveDailyRoster", {
           ...authParams(),
           date: state.rosterDate,
+          supervisor: payload.supervisor,
           rosterJson: JSON.stringify(payload.locations)
         });
 
         state.isDirty = false;
+        state.locations.forEach(location => {
+          if (!state.savedLocations.some(item =>
+            locationNameFromItem(item).toLowerCase() === location.locationName.toLowerCase()
+          )) {
+            state.savedLocations.push({ locationName: location.locationName });
+          }
+        });
         $("saveHint").textContent = `Last saved ${new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit"
@@ -1786,6 +1917,7 @@
     function buildRosterPayload() {
       return {
         date: state.rosterDate,
+        supervisor: normaliseText(state.supervisor),
         locations: state.locations.map(location => ({
           locationName: normaliseText(location.locationName),
           shift: normaliseText(location.shift),
@@ -2063,7 +2195,7 @@
         const timer = setTimeout(() => {
           cleanup();
           reject(new Error("The server did not respond. Please try again."));
-        }, 20000);
+        }, 45000);
 
         function cleanup() {
           clearTimeout(timer);
@@ -2162,6 +2294,7 @@
       renderLocations() and renderCalendar(), so they must remain global.
     */
     window.updateLocation = updateLocation;
+    window.handleLocationSelection = handleLocationSelection;
     window.updateStaff = updateStaff;
     window.removeLocation = removeLocation;
     window.addStaffRow = addStaffRow;
