@@ -1025,6 +1025,28 @@
       margin-top: 18px;
     }
 
+    .share-roster-editor {
+      margin: 0 0 22px;
+    }
+
+    .share-roster-editor > summary {
+      color: var(--white);
+      background: var(--black);
+      border-color: var(--black);
+    }
+
+    .share-roster-editor > summary:hover {
+      background: var(--dark);
+    }
+
+    .share-roster-editor[open] > summary {
+      margin-bottom: 12px;
+    }
+
+    .share-roster-editor .roster-message-card {
+      margin-bottom: 0;
+    }
+
     .roster-editor > summary {
       display: flex;
       align-items: center;
@@ -1278,11 +1300,11 @@
             type="password"
             required
             inputmode="numeric"
-            pattern="[0-9]{4,6}"
-            minlength="4"
-            maxlength="6"
+            pattern="[0-9]{1,5}"
+            minlength="1"
+            maxlength="5"
             autocomplete="current-password"
-            placeholder="4–6 digits"
+            placeholder="Up to 5 digits"
           />
           <button type="button" class="password-toggle" data-password-target="loginPassword" aria-label="Show password">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1309,10 +1331,10 @@
             type="password"
             required
             inputmode="numeric"
-            pattern="[0-9]{4,6}"
-            minlength="4"
-            maxlength="6"
-            placeholder="4–6 digits"
+            pattern="[0-9]{1,5}"
+            minlength="1"
+            maxlength="5"
+            placeholder="Up to 5 digits"
           />
           <button type="button" class="password-toggle" data-password-target="registerPassword" aria-label="Show password">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -1354,20 +1376,42 @@
           <p id="welcomeMessage">Hope you're having a good day.</p>
         </div>
 
+        <details class="roster-editor share-roster-editor">
+          <summary>Paste / share a roster</summary>
+          <div class="roster-message-card">
+            <label for="pastedRosterDate">Roster date</label>
+            <input id="pastedRosterDate" type="date" />
+            <label for="rosterSentBy">Roster sent by</label>
+            <select id="rosterSentBy">
+              <option value="">Select team member</option>
+            </select>
+            <label for="pastedRosterText">Paste the WhatsApp roster</label>
+            <textarea id="pastedRosterText" rows="7" maxlength="15000" placeholder="Paste the roster message here"></textarea>
+            <button id="publishRosterButton" type="button" class="primary-btn">Share roster with team</button>
+            <div id="shareRosterStatus" class="message"></div>
+          </div>
+        </details>
+
         <div class="roster-message-card">
           <div class="roster-message-head">
-            <h3>Today's roster message</h3>
+            <h3>Team rosters</h3>
             <button id="copyRosterMessageButton" type="button" class="secondary-btn">Copy roster</button>
           </div>
-          <pre id="rosterMessage" class="roster-message">Loading today's roster…</pre>
+          <label for="homeRosterDate">Choose a date</label>
+          <select id="homeRosterDate"></select>
+          <p id="homeRosterSender" class="day-note"></p>
+          <pre id="homeRosterMessage" class="roster-message">Loading rosters…</pre>
+          <div id="homeRosterStatus" class="message"></div>
         </div>
+
+        <div class="hidden" id="rosterMessage"></div>
 
         <button id="addLocationButton" type="button" class="add-location-btn quick-add-location">
           <span class="plus">+</span>
           Add location
         </button>
 
-        <details class="roster-editor">
+        <details id="rosterEditor" class="roster-editor">
           <summary>Manage daily roster</summary>
         <div class="hero">
           <div>
@@ -1400,9 +1444,9 @@
         </div>
 
         <div class="roster-meta">
-          <label for="rosterSupervisor">Roster created by (optional)</label>
+          <label for="rosterSupervisor">Roster prepared by (optional)</label>
           <select id="rosterSupervisor">
-            <option value="">Select supervisor</option>
+            <option value="">Select roster preparer</option>
           </select>
         </div>
 
@@ -1494,6 +1538,8 @@
       copyPreviousLocations
       saveDailyRoster
       getMonthlyRoster
+      getHomeRosters
+      saveSharedRoster
 
       The portal uses JSONP so it can be hosted as a normal HTML page while
       Google Apps Script remains the backend.
@@ -1511,7 +1557,15 @@
       supervisor: "",
       calendarMonth: "",
       monthlyRows: [],
-      supervisors: ["Aarti Paliwal", "Ankit Deshantri", "Ankush Jain", "Jaswant Prajapat", "Jitendra Singh Solanki"],
+      homeRosters: [],
+      supervisors: [
+        "Khushal", "Mohan", "Mohit Sharma", "Mohit Shrimali", "Nitendra", "Jitendra",
+        "Pradyumn", "Sakshi", "Manasvi", "Sonal", "Kajal", "Tanisha", "Krishna",
+        "Urvashi", "Neha", "Devshree", "Bhavika", "Neeraj", "Nishant", "Ankit",
+        "Laxman", "Sanjay", "Jainil", "Hemendra", "Yashvardhan", "Dinesh", "Bharat",
+        "Prahlad", "Ghanshyam Lohar", "Ghanshyam Dholi", "Kishan", "Dishant", "Jamna Das",
+        "Himmat", "Shubham Bind", "Shubham Talesara", "Narendra", "Vipul", "Khushali Paliwal"
+      ],
       isDirty: false,
       loading: false
     };
@@ -1528,6 +1582,7 @@
       state.calendarMonth = today.slice(0, 7);
 
       $("rosterDate").value = today;
+      $("pastedRosterDate").value = today;
       $("todayChip").textContent = formatLongDate(today);
 
       const savedUser = sessionStorage.getItem("msUser");
@@ -1574,6 +1629,8 @@
 
       $("addLocationButton").addEventListener("click", addLocation);
       $("copyRosterMessageButton").addEventListener("click", copyRosterMessage);
+      $("publishRosterButton").addEventListener("click", publishPastedRoster);
+      $("homeRosterDate").addEventListener("change", renderSelectedHomeRoster);
       $("rosterSupervisor").addEventListener("change", handleSupervisorSelection);
       $("copyPreviousButton").addEventListener("click", copyPreviousLocations);
       $("clearAssignmentsButton").addEventListener("click", clearStaffAssignments);
@@ -1643,7 +1700,7 @@
       if (state.supervisor && !names.includes(state.supervisor)) names.push(state.supervisor);
       names.sort((a, b) => a.localeCompare(b));
 
-      select.innerHTML = '<option value="">Select supervisor (optional)</option>' +
+      select.innerHTML = '<option value="">Select roster preparer</option>' +
         names.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("") +
         '<option value="__add_supervisor__">＋ Add new name</option>';
       select.value = state.supervisor;
@@ -1656,7 +1713,7 @@
       const password = $("loginPassword").value.trim();
 
       if (!validatePassword(password)) {
-        showMessage("authMessage", "Password must contain 4 to 6 digits.", "error");
+        showMessage("authMessage", "Password must contain 1 to 5 digits.", "error");
         return;
       }
 
@@ -1688,7 +1745,7 @@
       const password = $("registerPassword").value.trim();
 
       if (!validatePassword(password)) {
-        showMessage("authMessage", "Password must contain 4 to 6 digits.", "error");
+        showMessage("authMessage", "Password must contain 1 to 5 digits.", "error");
         return;
       }
 
@@ -1714,7 +1771,7 @@
       $("appScreen").classList.remove("hidden");
       $("userPill").textContent = titleCaseName(state.user.name || state.user.username);
 
-      await Promise.all([loadBootstrap(), loadDailyRoster()]);
+      await Promise.all([loadBootstrap(), loadDailyRoster(), loadHomeRosters()]);
       renderLocations();
       updateSummary();
     }
@@ -1733,17 +1790,99 @@
           .map(member => ({ ...member, name: titleCaseName(member.name) }))
           .sort((a, b) => a.name.localeCompare(b.name));
         state.savedLocations = Array.isArray(result.locations) ? result.locations : [];
-        if (Array.isArray(result.supervisors)) {
-          state.supervisors = [...new Set([
-            ...state.supervisors,
-            ...result.supervisors.map(titleCaseName).filter(Boolean)
-          ])].sort((a, b) => a.localeCompare(b));
-        }
-
         renderTeamTable();
         renderSupervisorOptions();
+        renderRosterSenderOptions();
       } catch (error) {
         showDailyStatus(error.message, "error");
+      }
+    }
+
+    function renderRosterSenderOptions() {
+      const select = $("rosterSentBy");
+      const previous = select.value;
+      select.innerHTML = '<option value="">Select team member</option>' +
+        state.staff.map(member =>
+          `<option value="${escapeHtml(member.username)}">${escapeHtml(member.name)}</option>`
+        ).join("");
+      select.value = state.staff.some(member => member.username === previous)
+        ? previous
+        : state.user?.username || "";
+    }
+
+    async function loadHomeRosters() {
+      try {
+        const result = await api("getHomeRosters", authParams());
+        const today = localDateKey(new Date());
+        state.homeRosters = Array.isArray(result.rosters) ? result.rosters : [];
+        state.homeRosters.sort((a, b) => {
+          const aFuture = a.date >= today;
+          const bFuture = b.date >= today;
+          if (aFuture !== bFuture) return aFuture ? -1 : 1;
+          return aFuture ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date);
+        });
+        renderHomeRosterOptions();
+      } catch (error) {
+        $("homeRosterMessage").textContent = error.message;
+      }
+    }
+
+    function renderHomeRosterOptions() {
+      const select = $("homeRosterDate");
+      if (!state.homeRosters.length) {
+        select.innerHTML = '<option value="">No rosters available</option>';
+        renderSelectedHomeRoster();
+        return;
+      }
+
+      const previousDate = select.value;
+      select.innerHTML = state.homeRosters.map(roster =>
+        `<option value="${escapeHtml(roster.date)}">${escapeHtml(formatLongDate(roster.date))}</option>`
+      ).join("");
+      select.value = state.homeRosters.some(roster => roster.date === previousDate)
+        ? previousDate
+        : state.homeRosters[0].date;
+      renderSelectedHomeRoster();
+    }
+
+    function renderSelectedHomeRoster() {
+      const roster = state.homeRosters.find(item => item.date === $("homeRosterDate").value);
+      $("homeRosterMessage").textContent = roster?.message || "No roster has been shared yet.";
+      $("homeRosterSender").textContent = roster?.sentBy
+        ? `Roster sent by: ${roster.sentBy}`
+        : "";
+    }
+
+    async function publishPastedRoster() {
+      const date = $("pastedRosterDate").value;
+      const sentBy = $("rosterSentBy").value;
+      const message = $("pastedRosterText").value.trim();
+
+      if (!date || !sentBy || !message) {
+        showMessage("shareRosterStatus", "Choose a date and sender, then paste the roster message.", "error");
+        return;
+      }
+
+      const button = $("publishRosterButton");
+      button.disabled = true;
+      showMessage("shareRosterStatus", "Sharing roster…", "info");
+
+      try {
+        const result = await api("saveSharedRoster", {
+          ...authParams(),
+          date,
+          sentBy,
+          message
+        });
+        $("pastedRosterText").value = "";
+        showMessage("shareRosterStatus", result.message || "Roster shared with the team.", "success");
+        await loadHomeRosters();
+        $("homeRosterDate").value = date;
+        renderSelectedHomeRoster();
+      } catch (error) {
+        showMessage("shareRosterStatus", error.message, "error");
+      } finally {
+        button.disabled = false;
       }
     }
 
@@ -1846,10 +1985,10 @@
     }
 
     async function copyRosterMessage() {
-      const text = $("rosterMessage").textContent;
+      const text = $("homeRosterMessage").textContent;
       try {
         await navigator.clipboard.writeText(text);
-        showDailyStatus("Roster message copied.", "success");
+        showMessage("homeRosterStatus", "Roster copied.", "success");
       } catch (error) {
         const temporary = document.createElement("textarea");
         temporary.value = text;
@@ -1859,7 +1998,7 @@
         temporary.select();
         const copied = document.execCommand("copy");
         temporary.remove();
-        showDailyStatus(copied ? "Roster message copied." : "Could not copy the roster message.", copied ? "success" : "error");
+        showMessage("homeRosterStatus", copied ? "Roster copied." : "Could not copy the roster message.", copied ? "success" : "error");
       }
     }
 
@@ -1910,7 +2049,7 @@
     }
 
     function addLocation() {
-      document.querySelector(".roster-editor").open = true;
+      $("rosterEditor").open = true;
       state.locations.push({
         id: createId(),
         locationName: "",
@@ -2244,6 +2383,7 @@
         showDailyStatus(result.message || "Daily roster saved successfully.", "success");
         updateSummary();
 
+        await loadHomeRosters();
         if (state.calendarMonth === state.rosterDate.slice(0, 7)) {
           loadMonthlyRoster(true);
         }
@@ -2418,6 +2558,7 @@
             <tr>
               <th>Name</th>
               <th>Employee ID</th>
+              <th>Designation</th>
               <th>Username</th>
               <th>Phone</th>
               <th>Status</th>
@@ -2428,6 +2569,7 @@
               <tr>
                 <td><strong>${escapeHtml(member.name || "")}</strong></td>
                 <td>${escapeHtml(member.employeeId || "—")}</td>
+                <td>${escapeHtml(member.role || "Associate")}</td>
                 <td>${escapeHtml(member.username || "—")}</td>
                 <td>${escapeHtml(member.phone || "—")}</td>
                 <td><span class="badge">${escapeHtml(member.status || "Active")}</span></td>
@@ -2520,7 +2662,7 @@
     }
 
     function validatePassword(value) {
-      return /^\d{4,6}$/.test(value);
+      return /^\d{1,5}$/.test(value);
     }
 
     function authParams() {
