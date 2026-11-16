@@ -1085,6 +1085,81 @@
       white-space: pre-wrap;
     }
 
+    .weekoff-card {
+      overflow: hidden;
+      margin-top: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .weekoff-card h3 {
+      margin: 0;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+    }
+
+    .weekoff-table-wrap {
+      overflow-x: auto;
+    }
+
+    .weekoff-table {
+      width: 100%;
+      min-width: 850px;
+      border-collapse: collapse;
+    }
+
+    .weekoff-table th,
+    .weekoff-table td {
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .weekoff-table th {
+      color: var(--muted);
+      background: var(--soft);
+      font-weight: 800;
+    }
+
+    .weekoff-table td:first-child,
+    .weekoff-table th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      min-width: 175px;
+      text-align: left;
+      background: var(--white);
+    }
+
+    .weekoff-table td:nth-child(2),
+    .weekoff-table th:nth-child(2) {
+      position: sticky;
+      left: 175px;
+      z-index: 1;
+      min-width: 105px;
+      background: var(--white);
+    }
+
+    .weekoff-table thead tr:first-child th {
+      background: var(--soft);
+    }
+
+    .weekoff-mark {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .weekoff-note {
+      padding: 11px 15px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
     @media (max-width: 620px) {
       body {
         padding-bottom: calc(74px + env(safe-area-inset-bottom));
@@ -1364,19 +1439,14 @@
 
     <main class="page">
       <nav class="nav">
-        <button type="button" class="active" data-section="dailySection">Daily Roster</button>
-        <button type="button" data-section="calendarSection">Monthly Calendar</button>
-        <button type="button" data-section="teamSection">Team</button>
+        <button type="button" class="active" data-section="dailySection">Daily Team Roster</button>
+        <button type="button" data-section="calendarSection">My Calendar</button>
+        <button type="button" data-section="teamSection">Team Sheet</button>
       </nav>
 
-      <!-- DAILY ROSTER -->
+      <!-- DAILY TEAM ROSTER -->
       <section id="dailySection" class="section active">
-        <div class="welcome-card">
-          <h2 id="welcomeTitle">Hi there!</h2>
-          <p id="welcomeMessage">Hope you're having a good day.</p>
-        </div>
-
-        <details class="roster-editor share-roster-editor">
+        <details class="roster-editor share-roster-editor" open>
           <summary>Paste / share a roster</summary>
           <div class="roster-message-card">
             <label for="pastedRosterDate">Roster date</label>
@@ -1394,7 +1464,7 @@
 
         <div class="roster-message-card">
           <div class="roster-message-head">
-            <h3>Team rosters</h3>
+            <h3>Daily team roster</h3>
             <button id="copyRosterMessageButton" type="button" class="secondary-btn">Copy roster</button>
           </div>
           <label for="homeRosterDate">Choose a date</label>
@@ -1404,72 +1474,11 @@
           <div id="homeRosterStatus" class="message"></div>
         </div>
 
-        <div class="hidden" id="rosterMessage"></div>
-
-        <button id="addLocationButton" type="button" class="add-location-btn quick-add-location">
-          <span class="plus">+</span>
-          Add location
-        </button>
-
-        <details id="rosterEditor" class="roster-editor">
-          <summary>Manage daily roster</summary>
-        <div class="hero">
-          <div>
-            <h2>Prepare daily roster</h2>
-            <p>
-              Choose a date, keep the previous day's locations, and assign team members from the dropdowns.
-            </p>
-          </div>
-          <div id="todayChip" class="date-chip"></div>
+        <div class="weekoff-card">
+          <h3 id="dailyWeekoffTitle">Team weekly offs</h3>
+          <div id="dailyWeekoffTable" class="weekoff-table-wrap"></div>
+          <p class="weekoff-note">Weekly offs are a random preview saved in this browser for each week; they are not shared with other users.</p>
         </div>
-
-        <div class="toolbar">
-          <div>
-            <label for="rosterDate">Roster date</label>
-            <input id="rosterDate" type="date" />
-          </div>
-
-          <p id="dayNote" class="day-note">
-            Loading roster information…
-          </p>
-
-          <div class="toolbar-actions">
-            <button id="copyPreviousButton" type="button" class="secondary-btn">
-              Restore previous locations
-            </button>
-            <button id="clearAssignmentsButton" type="button" class="secondary-btn">
-              Clear staff
-            </button>
-          </div>
-        </div>
-
-        <div class="roster-meta">
-          <label for="rosterSupervisor">Roster prepared by (optional)</label>
-          <select id="rosterSupervisor">
-            <option value="">Select roster preparer</option>
-          </select>
-        </div>
-
-        <div id="dailyStatus" class="status-strip"></div>
-
-        <div class="locations-head">
-          <h3>Locations and assigned staff</h3>
-        </div>
-
-        <div id="locationsList" class="locations-list"></div>
-
-        <div id="emptyLocations" class="empty-state hidden">
-          No locations are added for this date.<br />
-          Use <strong>Restore previous locations</strong> or <strong>Add location</strong>.
-        </div>
-
-        <div class="save-bar">
-          <p id="saveHint">Changes are not saved automatically.</p>
-          <button id="saveRosterButton" type="button" class="primary-btn">
-            Save daily roster
-          </button>
-        </div>
-        </details>
       </section>
 
       <!-- MONTHLY CALENDAR -->
@@ -1477,7 +1486,7 @@
         <div class="hero">
           <div>
             <h2>Monthly calendar</h2>
-            <p>Open any date to view or edit that day's location roster.</p>
+            <p>Open a date to view that day's shared team roster.</p>
           </div>
         </div>
 
@@ -1494,34 +1503,20 @@
         </div>
       </section>
 
-      <!-- TEAM -->
+      <!-- TEAM SHEET -->
       <section id="teamSection" class="section">
         <div class="hero">
           <div>
-            <h2>Team directory</h2>
-            <p>These active members appear in every staff dropdown.</p>
+            <h2>Team sheet</h2>
+            <p>Names, assigned weekly offs, weekdays, and dates in a spreadsheet-style view.</p>
           </div>
           <button id="refreshTeamButton" type="button" class="secondary-btn">Refresh</button>
         </div>
 
-        <div class="summary-grid">
-          <div class="summary-card">
-            <div class="summary-label">Active members</div>
-            <div id="teamCount" class="summary-value">0</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Locations today</div>
-            <div id="locationCount" class="summary-value">0</div>
-          </div>
-          <div class="summary-card">
-            <div class="summary-label">Staff assigned today</div>
-            <div id="assignedCount" class="summary-value">0</div>
-          </div>
-        </div>
-
         <div id="teamTable" class="table-wrap">
-          <div class="loader">Loading team…</div>
+          <div class="loader">Loading team sheet…</div>
         </div>
+        <p class="weekoff-note">Weekly offs are a random preview saved in this browser for each week; they are not shared with other users.</p>
       </section>
     </main>
   </section>
@@ -1558,6 +1553,8 @@
       calendarMonth: "",
       monthlyRows: [],
       homeRosters: [],
+      weekoffWeek: "",
+      weekoffRows: [],
       supervisors: [
         "Khushal", "Mohan", "Mohit Sharma", "Mohit Shrimali", "Nitendra", "Jitendra",
         "Pradyumn", "Sakshi", "Manasvi", "Sonal", "Kajal", "Tanisha", "Krishna",
@@ -1581,9 +1578,7 @@
       state.rosterDate = today;
       state.calendarMonth = today.slice(0, 7);
 
-      $("rosterDate").value = today;
       $("pastedRosterDate").value = today;
-      $("todayChip").textContent = formatLongDate(today);
 
       const savedUser = sessionStorage.getItem("msUser");
       const savedPassword = sessionStorage.getItem("msPassword");
@@ -1616,25 +1611,13 @@
       $("registerForm").addEventListener("submit", handleRegister);
       $("logoutButton").addEventListener("click", logout);
 
-      $("rosterDate").addEventListener("change", async event => {
-        if (!event.target.value) return;
-        if (state.isDirty && !confirm("Discard unsaved roster changes?")) {
-          event.target.value = state.rosterDate;
-          return;
-        }
-
-        state.rosterDate = event.target.value;
-        await loadDailyRoster();
-      });
-
-      $("addLocationButton").addEventListener("click", addLocation);
       $("copyRosterMessageButton").addEventListener("click", copyRosterMessage);
       $("publishRosterButton").addEventListener("click", publishPastedRoster);
-      $("homeRosterDate").addEventListener("change", renderSelectedHomeRoster);
-      $("rosterSupervisor").addEventListener("change", handleSupervisorSelection);
-      $("copyPreviousButton").addEventListener("click", copyPreviousLocations);
-      $("clearAssignmentsButton").addEventListener("click", clearStaffAssignments);
-      $("saveRosterButton").addEventListener("click", saveDailyRoster);
+      $("homeRosterDate").addEventListener("change", () => {
+        state.rosterDate = $("homeRosterDate").value || localDateKey(new Date());
+        renderSelectedHomeRoster();
+        renderWeekoffTables();
+      });
       $("refreshTeamButton").addEventListener("click", loadBootstrap);
 
       $("previousMonthButton").addEventListener("click", () => changeCalendarMonth(-1));
@@ -1771,9 +1754,8 @@
       $("appScreen").classList.remove("hidden");
       $("userPill").textContent = titleCaseName(state.user.name || state.user.username);
 
-      await Promise.all([loadBootstrap(), loadDailyRoster(), loadHomeRosters()]);
-      renderLocations();
-      updateSummary();
+      await Promise.all([loadBootstrap(), loadHomeRosters()]);
+      renderWeekoffTables();
     }
 
     function logout() {
@@ -1791,10 +1773,10 @@
           .sort((a, b) => a.name.localeCompare(b.name));
         state.savedLocations = Array.isArray(result.locations) ? result.locations : [];
         renderTeamTable();
-        renderSupervisorOptions();
         renderRosterSenderOptions();
+        renderWeekoffTables();
       } catch (error) {
-        showDailyStatus(error.message, "error");
+        showMessage("homeRosterStatus", error.message, "error");
       }
     }
 
@@ -1816,10 +1798,12 @@
         const today = localDateKey(new Date());
         state.homeRosters = Array.isArray(result.rosters) ? result.rosters : [];
         state.homeRosters.sort((a, b) => {
-          const aFuture = a.date >= today;
-          const bFuture = b.date >= today;
-          if (aFuture !== bFuture) return aFuture ? -1 : 1;
-          return aFuture ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date);
+          const rank = date => date > today ? 0 : date === today ? 1 : 2;
+          const rankDifference = rank(a.date) - rank(b.date);
+          if (rankDifference) return rankDifference;
+          return rank(a.date) === 2
+            ? b.date.localeCompare(a.date)
+            : a.date.localeCompare(b.date);
         });
         renderHomeRosterOptions();
       } catch (error) {
@@ -1831,6 +1815,7 @@
       const select = $("homeRosterDate");
       if (!state.homeRosters.length) {
         select.innerHTML = '<option value="">No rosters available</option>';
+        state.rosterDate = localDateKey(new Date());
         renderSelectedHomeRoster();
         return;
       }
@@ -1842,15 +1827,21 @@
       select.value = state.homeRosters.some(roster => roster.date === previousDate)
         ? previousDate
         : state.homeRosters[0].date;
+      state.rosterDate = select.value;
       renderSelectedHomeRoster();
     }
 
     function renderSelectedHomeRoster() {
-      const roster = state.homeRosters.find(item => item.date === $("homeRosterDate").value);
-      $("homeRosterMessage").textContent = roster?.message || "No roster has been shared yet.";
+      const selectedDate = $("homeRosterDate").value;
+      const roster = state.homeRosters.find(item => item.date === selectedDate);
+      $("homeRosterMessage").textContent = roster?.message ||
+        (selectedDate
+          ? `No roster has been shared for ${formatLongDate(selectedDate)} yet. Use “Paste / share a roster” above to add it for the team.`
+          : "No rosters have been shared yet. Use “Paste / share a roster” above to add one for the team.");
       $("homeRosterSender").textContent = roster?.sentBy
         ? `Roster sent by: ${roster.sentBy}`
         : "";
+      $("copyRosterMessageButton").disabled = !roster?.message;
     }
 
     async function publishPastedRoster() {
@@ -1878,7 +1869,9 @@
         showMessage("shareRosterStatus", result.message || "Roster shared with the team.", "success");
         await loadHomeRosters();
         $("homeRosterDate").value = date;
+        state.rosterDate = date;
         renderSelectedHomeRoster();
+        renderWeekoffTables();
       } catch (error) {
         showMessage("shareRosterStatus", error.message, "error");
       } finally {
@@ -2450,10 +2443,7 @@
       });
 
       if (sectionId === "calendarSection") loadMonthlyRoster();
-      if (sectionId === "teamSection") {
-        renderTeamTable();
-        updateSummary();
-      }
+      if (sectionId === "teamSection") renderTeamTable();
     }
 
     async function loadMonthlyRoster(silent = false) {
@@ -2533,51 +2523,135 @@
     }
 
     async function openCalendarDate(dateKey) {
-      if (state.isDirty && !confirm("Discard unsaved roster changes?")) return;
-
       state.rosterDate = dateKey;
-      $("rosterDate").value = dateKey;
+      const matchingRoster = state.homeRosters.find(roster => roster.date === dateKey);
+      if (matchingRoster) {
+        $("homeRosterDate").value = dateKey;
+        renderSelectedHomeRoster();
+      } else {
+        $("homeRosterSender").textContent = "";
+        $("homeRosterMessage").textContent = "No roster has been shared for this date yet.";
+      }
 
       const dailyButton = document.querySelector('[data-section="dailySection"]');
       openSection("dailySection", dailyButton);
-      await loadDailyRoster();
+      renderWeekoffTables();
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function renderTeamTable() {
-      $("teamCount").textContent = state.staff.length;
+      renderWeekoffTable("teamTable", weekoffReferenceDate());
+    }
 
+    function weekoffReferenceDate() {
+      return state.rosterDate || $("homeRosterDate")?.value || localDateKey(new Date());
+    }
+
+    function getWeekoffRows(referenceDate) {
+      const monday = startOfWeek(referenceDate);
+      const weekKey = localDateKey(monday);
+
+      if (state.weekoffWeek !== weekKey) {
+        const storageKey = `msWeekoffs:${weekKey}`;
+        const activeUsernames = state.staff.map(member => member.username).sort();
+        let savedRows = [];
+
+        try {
+          savedRows = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        } catch (error) {
+          savedRows = [];
+        }
+
+        const savedUsernames = Array.isArray(savedRows)
+          ? savedRows.map(member => member.username).sort()
+          : [];
+        const savedAssignmentsMatch = activeUsernames.length === savedUsernames.length &&
+          activeUsernames.every((username, index) => username === savedUsernames[index]);
+
+        if (savedAssignmentsMatch) {
+          state.weekoffRows = savedRows;
+        } else {
+          const shuffled = [...state.staff];
+          for (let index = shuffled.length - 1; index > 0; index--) {
+            const swapIndex = Math.floor(Math.random() * (index + 1));
+            [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+          }
+
+          const quotas = [7, 7, 7, 7, 7, 4, Math.max(0, shuffled.length - 39)];
+          let cursor = 0;
+          state.weekoffRows = shuffled.map(member => {
+            while (quotas[cursor] === 0 && cursor < quotas.length - 1) cursor++;
+            const offDay = cursor;
+            quotas[cursor]--;
+            return { name: member.name, username: member.username, offDay };
+          });
+
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(state.weekoffRows));
+          } catch (error) {
+            // Keep the current preview even when browser storage is unavailable.
+          }
+        }
+        state.weekoffWeek = weekKey;
+      }
+
+      return { monday, rows: state.weekoffRows || [] };
+    }
+
+    function startOfWeek(dateKey) {
+      const date = parseDateKey(dateKey);
+      const daysSinceMonday = (date.getDay() + 6) % 7;
+      date.setDate(date.getDate() - daysSinceMonday);
+      return date;
+    }
+
+    function renderWeekoffTable(containerId, referenceDate) {
+      const container = $(containerId);
+      if (!container) return;
       if (!state.staff.length) {
-        $("teamTable").innerHTML = '<div class="loader">No active team members found.</div>';
+        container.innerHTML = '<div class="loader">No active team members found.</div>';
         return;
       }
 
-      $("teamTable").innerHTML = `
-        <table>
+      const { monday, rows } = getWeekoffRows(referenceDate);
+      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+      const dates = days.map((_, index) => {
+        const date = new Date(monday);
+        date.setDate(monday.getDate() + index);
+        return localDateKey(date);
+      });
+      const weekLabel = `${formatShortDate(dates[0])} – ${formatShortDate(dates[6])}`;
+      if (containerId === "dailyWeekoffTable") {
+        $("dailyWeekoffTitle").textContent = `Team weekly offs · ${weekLabel}`;
+      }
+
+      container.innerHTML = `
+        <table class="weekoff-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Employee ID</th>
-              <th>Designation</th>
-              <th>Username</th>
-              <th>Phone</th>
-              <th>Status</th>
+              <th rowspan="2">A · Team member</th>
+              <th rowspan="2">B · Week off</th>
+              ${days.map(day => `<th>${day}</th>`).join("")}
             </tr>
+            <tr>${dates.map(date => `<th>${escapeHtml(formatShortDate(date))}</th>`).join("")}</tr>
           </thead>
           <tbody>
-            ${state.staff.map(member => `
+            ${rows.map(member => `
               <tr>
-                <td><strong>${escapeHtml(member.name || "")}</strong></td>
-                <td>${escapeHtml(member.employeeId || "—")}</td>
-                <td>${escapeHtml(member.role || "Associate")}</td>
-                <td>${escapeHtml(member.username || "—")}</td>
-                <td>${escapeHtml(member.phone || "—")}</td>
-                <td><span class="badge">${escapeHtml(member.status || "Active")}</span></td>
+                <td>${escapeHtml(member.name)}</td>
+                <td>${escapeHtml(days[member.offDay] || "—")}</td>
+                ${days.map((_, dayIndex) => `<td class="${member.offDay === dayIndex ? "weekoff-mark" : ""}">${member.offDay === dayIndex ? "WO" : ""}</td>`).join("")}
               </tr>
             `).join("")}
           </tbody>
         </table>
       `;
+    }
+
+    function renderWeekoffTables() {
+      const date = weekoffReferenceDate();
+      renderWeekoffTable("dailyWeekoffTable", date);
+      renderWeekoffTable("teamTable", date);
     }
 
     function updateSummary() {
